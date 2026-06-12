@@ -1,0 +1,20 @@
+
+RANGES
+biggest spitter range = 16
+worm range: 25 to 48
+
+personal laser range = 15
+laser turret range = 24 (but prioritizes nearest probs)
+gun turret range = 18
+flamethrower turret range = 30 nice!
+>>rocket launcher range = 36 nice!! 36/40/43/47/54
+submachine gune range = 18, up to 27 for legendary
+tank cannon range = 30
+
+TACTICS
+turret spam
+rockets out-range the worms
+tank circles base, runs over worms, maybe run over houses, kill rest while running away
+can probably just use machine gun
+
+

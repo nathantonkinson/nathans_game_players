@@ -1,0 +1,237 @@
+group,localized_name,name,order,stack_size,subgroup,type
+production,Accumulator,accumulator,e[accumulator]-a[accumulator],50,energy,item
+intermediate-products,Advanced circuit,advanced-circuit,f[advanced-circuit],200,intermediate-product,item
+logistics,Arithmetic combinator,arithmetic-combinator,c[combinators]-a[arithmetic-combinator],50,circuit-network,item
+combat,Artillery shell,artillery-shell,d[explosive-cannon-shell]-d[artillery],1,ammo,ammo
+combat,Artillery targeting remote,artillery-targeting-remote,b[turret]-d[artillery-turret]-b[remote],1,defensive-structure,capsule
+combat,Artillery turret,artillery-turret,b[turret]-d[artillery-turret]-a[turret],10,defensive-structure,item
+logistics,Artillery wagon,artillery-wagon,a[train-system]-i[artillery-wagon],5,train-transport,item-with-entity-data
+combat,Artillery cannon,artillery-wagon-cannon,z[artillery]-a[cannon],1,gun,gun
+production,Assembling machine 1,assembling-machine-1,a[assembling-machine-1],50,production-machine,item
+production,Assembling machine 2,assembling-machine-2,b[assembling-machine-2],50,production-machine,item
+production,Assembling machine 3,assembling-machine-3,c[assembling-machine-3],50,production-machine,item
+combat,Atomic bomb,atomic-bomb,d[rocket-launcher]-c[atomic-bomb],10,ammo,ammo
+intermediate-products,Automation science pack,automation-science-pack,a[automation-science-pack],200,science-pack,tool
+intermediate-products,Battery,battery,h[battery],200,raw-material,item
+combat,Personal battery,battery-equipment,b[battery]-a[battery-equipment],20,equipment,item
+combat,Personal battery MK2,battery-mk2-equipment,b[battery]-b[battery-equipment-mk2],20,equipment,item
+production,Beacon,beacon,a[beacon],10,module,item
+combat,Belt immunity equipment,belt-immunity-equipment,c[belt-immunity]-a[belt-immunity],20,equipment,item
+logistics,Big electric pole,big-electric-pole,a[energy]-c[big-electric-pole],50,energy-pipe-distribution,item
+production,Blueprint,blueprint,c[automated-construction]-a[blueprint],1,tool,blueprint
+production,Blueprint book,blueprint-book,c[automated-construction]-d[blueprint-book],1,tool,blueprint-book
+production,Boiler,boiler,b[steam-power]-a[boiler],50,energy,item
+other,Burner generator,burner-generator,t[item]-o[burner-generator],10,other,item
+logistics,Burner inserter,burner-inserter,a[burner-inserter],50,inserter,item
+production,Burner mining drill,burner-mining-drill,a[items]-a[burner-mining-drill],50,extraction-machine,item
+combat,Cannon shell,cannon-shell,d[cannon-shell]-a[basic],200,ammo,ammo
+logistics,Car,car,b[personal-transport]-a[car],1,transport,item-with-entity-data
+logistics,Cargo wagon,cargo-wagon,a[train-system]-g[cargo-wagon],5,train-transport,item-with-entity-data
+production,Centrifuge,centrifuge,g[centrifuge],50,production-machine,item
+production,Chemical plant,chemical-plant,e[chemical-plant],10,production-machine,item
+intermediate-products,Chemical science pack,chemical-science-pack,d[chemical-science-pack],200,science-pack,tool
+logistics,Cliff explosives,cliff-explosives,d[cliff-explosives],20,terrain,capsule
+combat,Cluster grenade,cluster-grenade,a[grenade]-b[cluster],100,capsule,capsule
+intermediate-products,Coal,coal,b[coal],50,raw-resource,item
+intermediate-products,Coin,coin,y,100000,science-pack,item
+combat,Combat shotgun,combat-shotgun,b[shotgun]-a[combat],5,gun,gun
+logistics,Concrete,concrete,b[concrete]-a[plain],100,terrain,item
+logistics,Constant combinator,constant-combinator,c[combinators]-c[constant-combinator],50,circuit-network,item
+logistics,Construction robot,construction-robot,a[robot]-b[construction-robot],50,logistic-network,item
+intermediate-products,Copper cable,copper-cable,a[copper-cable],200,intermediate-product,item
+intermediate-products,Copper ore,copper-ore,f[copper-ore],50,raw-resource,item
+intermediate-products,Copper plate,copper-plate,c[copper-plate],100,raw-material,item
+other,Crude oil,crude-oil,a[fluid]-b[crude-oil],other,fluid
+intermediate-products,<dummy name>,crude-oil-barrel,b[crude-oil-barrel],10,barrel,item
+logistics,Decider combinator,decider-combinator,c[combinators]-b[decider-combinator],50,circuit-network,item
+production,Deconstruction planner,deconstruction-planner,c[automated-construction]-b[deconstruction-planner],1,tool,deconstruction-item
+combat,Defender capsule,defender-capsule,d[defender-capsule],100,capsule,capsule
+combat,Destroyer capsule,destroyer-capsule,f[destroyer-capsule],100,capsule,capsule
+combat,Discharge defense,discharge-defense-equipment,b[active-defense]-b[discharge-defense-equipment]-a[equipment],20,military-equipment,item
+combat,Discharge defense remote,discharge-defense-remote,b[active-defense]-b[discharge-defense-equipment]-b[remote],1,military-equipment,capsule
+combat,Distractor capsule,distractor-capsule,e[defender-capsule],100,capsule,capsule
+production,dummy-steel-axe,a[mining]-b[steel-axe],1,tool,mining-tool
+production,Efficiency module,effectivity-module,c[effectivity]-a[effectivity-module-1],50,module,module
+production,Efficiency module 2,effectivity-module-2,c[effectivity]-b[effectivity-module-2],50,module,module
+production,Efficiency module 3,effectivity-module-3,c[effectivity]-c[effectivity-module-3],50,module,module
+other,Electric energy interface,electric-energy-interface,a[electric-energy-interface]-b[electric-energy-interface],50,other,item
+intermediate-products,Electric engine unit,electric-engine-unit,i[electric-engine-unit],50,intermediate-product,item
+production,Electric furnace,electric-furnace,c[electric-furnace],50,smelting-machine,item
+production,Electric mining drill,electric-mining-drill,a[items]-b[electric-mining-drill],50,extraction-machine,item
+intermediate-products,Electronic circuit,electronic-circuit,e[electronic-circuit],200,intermediate-product,item
+intermediate-products,Empty barrel,empty-barrel,d[empty-barrel],10,intermediate-product,item
+combat,Energy shield,energy-shield-equipment,a[shield]-a[energy-shield-equipment],20,military-equipment,item
+combat,Energy shield MK2,energy-shield-mk2-equipment,a[shield]-b[energy-shield-equipment-mk2],20,military-equipment,item
+intermediate-products,Engine unit,engine-unit,h[engine-unit],50,intermediate-product,item
+combat,Exoskeleton,exoskeleton-equipment,d[exoskeleton]-a[exoskeleton-equipment],20,equipment,item
+combat,Explosive cannon shell,explosive-cannon-shell,d[cannon-shell]-c[explosive],200,ammo,ammo
+combat,Explosive rocket,explosive-rocket,d[rocket-launcher]-b[explosive],200,ammo,ammo
+combat,Explosive uranium cannon shell,explosive-uranium-cannon-shell,d[explosive-cannon-shell]-c[uranium],200,ammo,ammo
+intermediate-products,Explosives,explosives,j[explosives],50,raw-material,item
+logistics,Express loader,express-loader,d[loader]-c[express-loader],50,belt,item
+logistics,Express splitter,express-splitter,c[splitter]-c[express-splitter],50,belt,item
+logistics,Express transport belt,express-transport-belt,a[transport-belt]-c[express-transport-belt],100,belt,item
+logistics,Express underground belt,express-underground-belt,b[underground-belt]-c[express-underground-belt],50,belt,item
+logistics,Fast inserter,fast-inserter,d[fast-inserter],50,inserter,item
+logistics,Fast loader,fast-loader,d[loader]-b[fast-loader],50,belt,item
+logistics,Fast splitter,fast-splitter,c[splitter]-b[fast-splitter],50,belt,item
+logistics,Fast transport belt,fast-transport-belt,a[transport-belt]-b[fast-transport-belt],100,belt,item
+logistics,Fast underground belt,fast-underground-belt,b[underground-belt]-b[fast-underground-belt],50,belt,item
+logistics,Filter inserter,filter-inserter,e[filter-inserter],50,inserter,item
+combat,Firearm magazine,firearm-magazine,a[basic-clips]-a[firearm-magazine],200,ammo,ammo
+combat,Flamethrower,flamethrower,e[flamethrower],5,gun,gun
+combat,Flamethrower ammo,flamethrower-ammo,e[flamethrower],100,ammo,ammo
+combat,Flamethrower turret,flamethrower-turret,b[turret]-c[flamethrower-turret],50,defensive-structure,item
+other,Unknown fluid,fluid-unknown,other,fluid
+logistics,Fluid wagon,fluid-wagon,a[train-system]-h[fluid-wagon],5,train-transport,item-with-entity-data
+intermediate-products,Flying robot frame,flying-robot-frame,l[flying-robot-frame],50,intermediate-product,item
+combat,Portable fusion reactor,fusion-reactor-equipment,a[energy-source]-b[fusion-reactor],20,equipment,item
+combat,Gate,gate,a[wall]-b[gate],50,defensive-structure,item
+logistics,Green wire,green-wire,b[wires]-b[green-wire],200,circuit-network,item
+combat,Grenade,grenade,a[grenade]-a[normal],100,capsule,capsule
+combat,Gun turret,gun-turret,b[turret]-a[gun-turret],50,defensive-structure,item
+logistics,Hazard concrete,hazard-concrete,b[concrete]-b[hazard],100,terrain,item
+production,Heat exchanger,heat-exchanger,f[nuclear-energy]-c[heat-exchanger],50,energy,item
+other,Heat interface,heat-interface,b[heat-interface],20,other,item
+production,Heat pipe,heat-pipe,f[nuclear-energy]-b[heat-pipe],50,energy,item
+combat,Heavy armor,heavy-armor,b[heavy-armor],1,armor,armor
+other,Heavy oil,heavy-oil,a[fluid]-c[heavy-oil],other,fluid
+intermediate-products,<dummy name>,heavy-oil-barrel,b[heavy-oil-barrel],10,barrel,item
+other,Infinity chest,infinity-chest,c[item]-o[infinity-chest],10,other,item
+other,Infinity pipe,infinity-pipe,d[item]-o[infinity-pipe],10,other,item
+logistics,Inserter,inserter,b[inserter],50,inserter,item
+logistics,Iron chest,iron-chest,a[items]-b[iron-chest],50,storage,item
+intermediate-products,Iron gear wheel,iron-gear-wheel,c[iron-gear-wheel],100,intermediate-product,item
+intermediate-products,Iron ore,iron-ore,e[iron-ore],50,raw-resource,item
+intermediate-products,Iron plate,iron-plate,b[iron-plate],100,raw-material,item
+intermediate-products,Iron stick,iron-stick,b[iron-stick],100,intermediate-product,item
+other,Unknown item,item-unknown,1,other,item
+production,Lab,lab,g[lab],10,production-machine,item
+combat,Land mine,land-mine,f[land-mine],100,gun,item
+logistics,Landfill,landfill,c[landfill]-a[dirt],100,terrain,item
+combat,Laser turret,laser-turret,b[turret]-b[laser-turret],50,defensive-structure,item
+combat,Light armor,light-armor,a[light-armor],1,armor,armor
+other,Light oil,light-oil,a[fluid]-d[light-oil],other,fluid
+intermediate-products,<dummy name>,light-oil-barrel,b[light-oil-barrel],10,barrel,item
+other,Linked belt,linked-belt,b[items]-b[linked-belt],10,other,item
+other,Linked chest,linked-chest,a[items]-a[linked-chest],10,other,item
+logistics,Loader,loader,d[loader]-a[basic-loader],50,belt,item
+logistics,Locomotive,locomotive,a[train-system]-f[locomotive],5,train-transport,item-with-entity-data
+logistics,Active provider chest,logistic-chest-active-provider,b[storage]-c[logistic-chest-active-provider],50,logistic-network,item
+logistics,Buffer chest,logistic-chest-buffer,b[storage]-d[logistic-chest-buffer],50,logistic-network,item
+logistics,Passive provider chest,logistic-chest-passive-provider,b[storage]-c[logistic-chest-passive-provider],50,logistic-network,item
+logistics,Requester chest,logistic-chest-requester,b[storage]-e[logistic-chest-requester],50,logistic-network,item
+logistics,Storage chest,logistic-chest-storage,b[storage]-c[logistic-chest-storage],50,logistic-network,item
+logistics,Logistic robot,logistic-robot,a[robot]-a[logistic-robot],50,logistic-network,item
+intermediate-products,Logistic science pack,logistic-science-pack,b[logistic-science-pack],200,science-pack,tool
+logistics,Long-handed inserter,long-handed-inserter,c[long-handed-inserter],50,inserter,item
+intermediate-products,Low density structure,low-density-structure,o[low-density-structure],10,intermediate-product,item
+other,Lubricant,lubricant,e[lubricant],other,fluid
+intermediate-products,<dummy name>,lubricant-barrel,b[lubricant-barrel],10,barrel,item
+logistics,Medium electric pole,medium-electric-pole,a[energy]-b[medium-electric-pole],50,energy-pipe-distribution,item
+intermediate-products,Military science pack,military-science-pack,c[military-science-pack],200,science-pack,tool
+combat,Modular armor,modular-armor,c[modular-armor],1,armor,armor
+combat,Nightvision,night-vision-equipment,f[night-vision]-a[night-vision-equipment],20,equipment,item
+intermediate-products,Nuclear fuel,nuclear-fuel,q[uranium-rocket-fuel],1,intermediate-product,item
+production,Nuclear reactor,nuclear-reactor,f[nuclear-energy]-a[reactor],10,energy,item
+production,Offshore pump,offshore-pump,b[fluids]-a[offshore-pump],20,extraction-machine,item
+production,Oil refinery,oil-refinery,d[refinery],10,production-machine,item
+combat,Personal laser defense,personal-laser-defense-equipment,b[active-defense]-a[personal-laser-defense-equipment],20,military-equipment,item
+combat,Personal roboport,personal-roboport-equipment,e[robotics]-a[personal-roboport-equipment],20,equipment,item
+combat,Personal roboport MK2,personal-roboport-mk2-equipment,e[robotics]-b[personal-roboport-mk2-equipment],20,equipment,item
+other,Petroleum gas,petroleum-gas,a[fluid]-e[petroleum-gas],other,fluid
+intermediate-products,<dummy name>,petroleum-gas-barrel,b[petroleum-gas-barrel],10,barrel,item
+combat,Piercing rounds magazine,piercing-rounds-magazine,a[basic-clips]-b[piercing-rounds-magazine],200,ammo,ammo
+combat,Piercing shotgun shells,piercing-shotgun-shell,b[shotgun]-b[piercing],200,ammo,ammo
+logistics,Pipe,pipe,a[pipe]-a[pipe],100,energy-pipe-distribution,item
+logistics,Pipe to ground,pipe-to-ground,a[pipe]-b[pipe-to-ground],50,energy-pipe-distribution,item
+combat,Pistol,pistol,a[basic-clips]-a[pistol],5,gun,gun
+intermediate-products,Plastic bar,plastic-bar,f[plastic-bar],100,raw-material,item
+combat,Player port,player-port,z[not-used],50,defensive-structure,item
+combat,Poison capsule,poison-capsule,b[poison-capsule],100,capsule,capsule
+combat,Power armor,power-armor,d[power-armor],1,armor,armor
+combat,Power armor MK2,power-armor-mk2,e[power-armor-mk2],1,armor,armor
+logistics,Power switch,power-switch,d[other]-a[power-switch],50,circuit-network,item
+intermediate-products,Processing unit,processing-unit,g[processing-unit],100,intermediate-product,item
+intermediate-products,Production science pack,production-science-pack,e[production-science-pack],200,science-pack,tool
+production,Productivity module,productivity-module,c[productivity]-a[productivity-module-1],50,module,module
+production,Productivity module 2,productivity-module-2,c[productivity]-b[productivity-module-2],50,module,module
+production,Productivity module 3,productivity-module-3,c[productivity]-c[productivity-module-3],50,module,module
+logistics,Programmable speaker,programmable-speaker,d[other]-b[programmable-speaker],50,circuit-network,item
+logistics,Pump,pump,b[pipe]-c[pump],50,energy-pipe-distribution,item
+production,Pumpjack,pumpjack,b[fluids]-b[pumpjack],20,extraction-machine,item
+combat,Radar,radar,d[radar]-a[radar],50,defensive-structure,item
+logistics,<dummy name>,rail,a[train-system]-a[rail],100,train-transport,rail-planner
+logistics,Rail chain signal,rail-chain-signal,a[train-system]-e[rail-signal-chain],50,train-transport,item
+logistics,Rail signal,rail-signal,a[train-system]-d[rail-signal],50,train-transport,item
+intermediate-products,Raw fish,raw-fish,h[raw-fish],100,raw-resource,capsule
+logistics,Red wire,red-wire,b[wires]-a[red-wire],200,circuit-network,item
+logistics,Refined concrete,refined-concrete,b[concrete]-c[refined],100,terrain,item
+logistics,Refined hazard concrete,refined-hazard-concrete,b[concrete]-d[refined-hazard],100,terrain,item
+production,Repair pack,repair-pack,b[repair]-a[repair-pack],100,tool,repair-tool
+logistics,Roboport,roboport,c[signal]-a[roboport],10,logistic-network,item
+combat,Rocket,rocket,d[rocket-launcher]-a[basic],200,ammo,ammo
+intermediate-products,Rocket control unit,rocket-control-unit,n[rocket-control-unit],10,intermediate-product,item
+intermediate-products,Rocket fuel,rocket-fuel,p[rocket-fuel],10,intermediate-product,item
+combat,Rocket launcher,rocket-launcher,d[rocket-launcher],5,gun,gun
+intermediate-products,Rocket part,rocket-part,q[rocket-part],5,intermediate-product,item
+production,Rocket silo,rocket-silo,e[rocket-silo],1,space-related,item
+production,Satellite,satellite,m[satellite],1,space-related,item
+combat,Shotgun,shotgun,b[shotgun]-a[basic],5,gun,gun
+combat,Shotgun shells,shotgun-shell,b[shotgun]-a[basic],200,ammo,ammo
+other,Simple entity with force,simple-entity-with-force,s[simple-entity-with-force]-f[simple-entity-with-force],50,other,item
+other,Simple entity with owner,simple-entity-with-owner,s[simple-entity-with-owner]-o[simple-entity-with-owner],50,other,item
+combat,Slowdown capsule,slowdown-capsule,c[slowdown-capsule],100,capsule,capsule
+logistics,Small electric pole,small-electric-pole,a[energy]-a[small-electric-pole],50,energy-pipe-distribution,item
+logistics,Lamp,small-lamp,a[light]-a[small-lamp],50,circuit-network,item
+production,Solar panel,solar-panel,d[solar-panel]-a[solar-panel],50,energy,item
+combat,Portable solar panel,solar-panel-equipment,a[energy-source]-a[solar-panel],20,equipment,item
+intermediate-products,Solid fuel,solid-fuel,c[solid-fuel],50,raw-material,item
+intermediate-products,Space science pack,space-science-pack,g[space-science-pack],2000,science-pack,tool
+production,Speed module,speed-module,a[speed]-a[speed-module-1],50,module,module
+production,Speed module 2,speed-module-2,a[speed]-b[speed-module-2],50,module,module
+production,Speed module 3,speed-module-3,a[speed]-c[speed-module-3],50,module,module
+logistics,Spidertron,spidertron,b[personal-transport]-c[spidertron]-a[spider],1,transport,item-with-entity-data
+combat,<dummy name>,spidertron-rocket-launcher-1,z[spider]-a[rocket-launcher],1,gun,gun
+combat,<dummy name>,spidertron-rocket-launcher-2,z[spider]-a[rocket-launcher],1,gun,gun
+combat,<dummy name>,spidertron-rocket-launcher-3,z[spider]-a[rocket-launcher],1,gun,gun
+combat,<dummy name>,spidertron-rocket-launcher-4,z[spider]-a[rocket-launcher],1,gun,gun
+logistics,Splitter,splitter,c[splitter]-a[splitter],50,belt,item
+logistics,Stack filter inserter,stack-filter-inserter,g[stack-filter-inserter],50,inserter,item
+logistics,Stack inserter,stack-inserter,f[stack-inserter],50,inserter,item
+other,Steam,steam,a[fluid]-b[steam],other,fluid
+production,Steam engine,steam-engine,b[steam-power]-b[steam-engine],10,energy,item
+production,Steam turbine,steam-turbine,f[nuclear-energy]-d[steam-turbine],10,energy,item
+logistics,Steel chest,steel-chest,a[items]-c[steel-chest],50,storage,item
+production,Steel furnace,steel-furnace,b[steel-furnace],50,smelting-machine,item
+intermediate-products,Steel plate,steel-plate,d[steel-plate],100,raw-material,item
+intermediate-products,Stone,stone,d[stone],50,raw-resource,item
+logistics,Stone brick,stone-brick,a[stone-brick],100,terrain,item
+production,Stone furnace,stone-furnace,a[stone-furnace],50,smelting-machine,item
+combat,Wall,stone-wall,a[stone-wall]-a[stone-wall],100,defensive-structure,item
+logistics,Storage tank,storage-tank,b[fluid]-a[storage-tank],50,storage,item
+combat,Submachine gun,submachine-gun,a[basic-clips]-b[submachine-gun],5,gun,gun
+logistics,Substation,substation,a[energy]-d[substation],50,energy-pipe-distribution,item
+intermediate-products,Sulfur,sulfur,g[sulfur],50,raw-material,item
+other,Sulfuric acid,sulfuric-acid,a[fluid]-f[sulfuric-acid],other,fluid
+intermediate-products,<dummy name>,sulfuric-acid-barrel,b[sulfuric-acid-barrel],10,barrel,item
+logistics,Tank,tank,b[personal-transport]-b[tank],1,transport,item-with-entity-data
+combat,Tank cannon,tank-cannon,z[tank]-a[cannon],5,gun,gun
+combat,Vehicle flamethrower,tank-flamethrower,b[flamethrower]-b[tank-flamethrower],1,gun,gun
+combat,Vehicle machine gun,tank-machine-gun,a[basic-clips]-b[tank-machine-gun],1,gun,gun
+logistics,Train stop,train-stop,a[train-system]-c[train-stop],10,train-transport,item
+logistics,Transport belt,transport-belt,a[transport-belt]-a[transport-belt],100,belt,item
+logistics,Underground belt,underground-belt,b[underground-belt]-a[underground-belt],50,belt,item
+intermediate-products,Uranium-235,uranium-235,r[uranium-235],100,intermediate-product,item
+intermediate-products,Uranium-238,uranium-238,r[uranium-238],100,intermediate-product,item
+combat,Uranium cannon shell,uranium-cannon-shell,d[cannon-shell]-c[uranium],200,ammo,ammo
+intermediate-products,Uranium fuel cell,uranium-fuel-cell,r[uranium-processing]-a[uranium-fuel-cell],50,intermediate-product,item
+intermediate-products,Uranium ore,uranium-ore,g[uranium-ore],50,raw-resource,item
+combat,Uranium rounds magazine,uranium-rounds-magazine,a[basic-clips]-c[uranium-rounds-magazine],200,ammo,ammo
+intermediate-products,Used-up uranium fuel cell,used-up-uranium-fuel-cell,r[used-up-uranium-fuel-cell],50,intermediate-product,item
+intermediate-products,Utility science pack,utility-science-pack,f[utility-science-pack],200,science-pack,tool
+combat,Vehicle machine gun,vehicle-machine-gun,a[basic-clips]-b[vehicle-machine-gun],1,gun,gun
+other,Water,water,a[fluid]-a[water],other,fluid
+intermediate-products,<dummy name>,water-barrel,b[water-barrel],10,barrel,item
+intermediate-products,Wood,wood,a[wood],100,raw-resource,item
+logistics,Wooden chest,wooden-chest,a[items]-a[wooden-chest],50,storage,item

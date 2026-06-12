@@ -1,0 +1,26 @@
+
+
+
+counter 1 = self shield
+counter 2 = self health
+counter 3 = milliseconds until done firing 
+counter 4 = 
+counter 5
+
+tag 1
+tag 2
+tag 3 = I am attacking this
+tag 4
+tag 5
+
+team counter A
+team counter B
+team counter C
+team counter D
+team coutner E
+
+team tag A
+team tag B
+team tag C
+team tag D
+team tag E
