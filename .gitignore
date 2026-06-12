@@ -1,0 +1,6 @@
+.tmp.drivedownload/
+.tmp.driveupload/
+__pycache__/
+Farkle/
+GenericAI/
+tictactoe/
