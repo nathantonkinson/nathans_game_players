@@ -47,6 +47,8 @@ Might need this stuff for first commits
 - git status - gets difference of current files from the known latest information on your branch, I think?
 - git branch --show-current
 - git log --oneline
+- git diff - line by line differences
+    - q to exit
 ## Remove files from latest commit that is not yet pushed
 - git rm --cached path/to/bigfile
 - git commit --amend
