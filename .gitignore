@@ -1,7 +1,12 @@
 .tmp.drivedownload/
 .tmp.driveupload/
 __pycache__/
-Farkle/
-GenericAI/
-tictactoe/
-UniWar/TuringBot_3.3.1_windows64.exe
+/Farkle/
+/GenericAI/
+/tictactoe/
+TuringBot_3.3.1_windows64.exe
+.~*
+*.log
+*.tmp
+/UniWar/maps/
+/UniWar/playerSubmissions/

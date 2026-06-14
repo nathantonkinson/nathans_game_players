@@ -4,7 +4,7 @@ Project to try to make better computer players for uniwar
 
 https://www.uniwar.com/home.page
 https://play.google.com/store/apps/details?id=android.uniwar 
-Can also be played on bluestacks
+Can also be played on bluestacks, steam
 
 
 # Mechanics/rules/UI
@@ -28,13 +28,14 @@ Can also be played on bluestacks
     - can't convert capturing unit
     - can uv capturing units
     - uv not affecting underwater? what about buried?
-    - engineer immune to plage, same with sapeins
+    - engineer immune to plage, same with submarine
     - uv affects both sapien and kraahl
     - map starting credits to all first turn. 1st player doesn't get base income
     - terrain bonuses are by unit type, not specific unit
     - glitch where move after attack allows a unit to live
     - can't attack what you can't see
     - ? can build sub under friendly or enemy unit on water base?
+    - plague affects all other sapiens, spreads at start of turn of being infected unit from any adjacent?
 - known ways to exploit existing AIS
 
 # Stragegy/heuristics
@@ -46,9 +47,71 @@ Can also be played on bluestacks
 - Blackjack on my own (failed by self, worked with replit)
 - Reversi 4x4 (done, the AI is just as good as perfect player)
 - Reversi 8x8 (MCTS and genetic are both plateauing at 70% vs random)
-- Uniwar - no income, no healing, player vs player, only marines, only plains
+- Uniwar - no income, no healing, player vs player, only marines, only plains, games capped at 10 rounds or something
 - AI to play this simplified version, try to get it near human level
 - Add terrain
 - Add different unit types, races
 - Big threshold adding healing
 - Big threshold adding income/bases/capturing
+
+# Architecture plan for uniwar
+- src folder for all the engine code stuff
+- gameData folder
+    - Terrain types
+    - Unit classes
+    - Units
+    - Images for units and terrain
+- Unit class
+    - number of actions/turn
+    - action list available to it
+    - maybe inherit unit type (heavy ground) or custom stats (must still declare a type)
+    - normal stats like atk vs types
+    - max hp
+    - current hp
+    - current veterancy
+- Action and/or ability class?? maybe not, but there is a list of abilities
+- Hex class??
+    - id?
+    - terrain type
+    - contains maybe units
+- Game state class
+    - list of hexes and the units on them
+    - turn order / player list with their credits
+    - is fog of war on and other config (random unit building and stuff, win conditions)
+    - rng list (if we take a partial turn, used rngs get removed from front of list)
+- Move class
+    - Ordered list of units (hex and state in that hex) and their actions
+    - Action possibilities (and potentially multiple actions per unit)
+        - Move
+        - Attack
+        - Move after attack
+        - Heal
+        - Special (convert, UV, EMP, submerge/bury, surface)
+    - Maybe something special for pass turn - either call unit at 0,0 or it's just an action available to all units, idk
+    - Do we build in the results of actions to this or not?
+- Game history class
+    - The initial map/game state (probably contains full map data, not just a link to the map)
+    - List of move class
+    - Somehow also need the results (damage and stuff), 
+- Game engine class
+    - versions that are much simpler, version that are more complicated or full
+    - runs a single game
+    - pass it a game state to start
+    - call its currentState() to get state - needs ability to fog of war
+    - then pass moves
+    - validate moves (reject if invalid etc)
+    - apply moves, update itself
+    - builds a game history
+    - pass it a game state on initialization (to handle first turnm it is 1st players turn already with start cred)
+- Player class
+    - people should "inherit" this to make their own
+    - we can modify this to communicate locally or API or whatever?? or separate class for the commuication?
+- Game master class (match runner)
+    - for 1 to 100
+    - initialize engine
+    - pass state to player, get move from player, pass that to engine, get state back
+- Submissions folder in the github whose members inherit player class
+- Maps folder (These are just game states)
+- Match history folder containing game history
+- Visualizer class
+    - 
