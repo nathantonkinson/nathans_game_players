@@ -1,0 +1,3 @@
+UnitRace,UnitName,UnitNumber,Terrain,MobilityCost,AttackBonus,DefenseBonus,Notes
+Sapiens,Battery,21,Forest,100,-100,-100,Or should we put some other weird value in here to indicate impossible?
+Sapiens,Battery,21,Swamp,100,-100,-100,Or should we put some other weird value in here to indicate impossible?

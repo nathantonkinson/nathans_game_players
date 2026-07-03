@@ -1,0 +1,39 @@
+UnitRace,UnitName,UnitNumber,StateName,StateNumber,Mobility,Vision,AttackRangeMin,AttackRangeMax,Defense
+Khraleans,Infected Marine,1,Surfaceair,1,10,4,1,1,6
+Khraleans,Underling,2,Surfaceair,1,11,3,1,1,5
+Khraleans,Borfly,3,Surfaceair,1,6,3,2,3,2
+Khraleans,Salamander,4,Surfaceair,1,9,4,0,1,8
+Khraleans,Infector,5,Surfaceair,1,8,3,1,1,0
+Khraleans,Swarmer,6,Surfaceair,1,9,5,1,2,4
+Khraleans,Garuda,7,Surfaceair,1,12,5,1,1,9
+Khraleans,Kraken,8,Surfaceair,1,10,3,0,2,8
+Khraleans,Pinzer,9,Surfaceair,1,8,3,1,1,13
+Khraleans,Wyrm,10,Surfaceair,1,6,3,1,3,4
+Khraleans,Leviathan,11,Surfaceair,1,11,4,0,3,12
+Sapiens,Mecha II,12,Surfaceair,1,8,3,1,1,8
+Sapiens,Marine,13,Surfaceair,1,9,4,1,1,5
+Sapiens,Engineer,14,Surfaceair,1,6,3,1,1,0
+Sapiens,Fuze,15,Surfaceair,1,9,4,0,2,2
+Sapiens,Marauder,16,Surfaceair,1,12,5,1,1,7
+Sapiens,Bopper,17,Surfaceair,1,7,3,3,3,0
+Sapiens,Tank,18,Surfaceair,1,8,3,1,1,13
+Sapiens,Submarine,19,Surfaceair,1,9,3,0,3,5
+Sapiens,Helicopter,20,Surfaceair,1,12,5,1,1,10
+Sapiens,Battery,21,Surfaceair,1,5,4,2,4,4
+Sapiens,Destroyer,22,Surfaceair,1,12,5,0,3,12
+Titans,Cyber Underling,23,Surfaceair,1,10,4,1,1,6
+Titans,Mecha,24,Surfaceair,1,8,4,1,1,6
+Titans,Assimilator,25,Surfaceair,1,6,3,1,1,0
+Titans,Speeder,26,Surfaceair,1,16,5,1,1,8
+Titans,Mantisse,27,Surfaceair,1,11,4,0,2,4
+Titans,Guardian,28,Surfaceair,1,10,2,1,2,3
+Titans,Eclipse,29,Surfaceair,1,10,4,1,2,10
+Titans,Skimmer,30,Surfaceair,1,10,4,0,3,6
+Titans,Plasma Tank,31,Surfaceair,1,7,3,1,1,14
+Titans,Walker,32,Surfaceair,1,6,5,3,5,5
+Titans,Hydronaut,33,Surfaceair,1,11,6,2,4,10
+Khraleans,Kraken,8,Underwater,2,10,3,1,1,12
+Sapiens,Submarine,19,Underwater,2,9,2,1,2,8
+Titans,Skimmer,30,Underwater,2,10,3,1,2,9
+Khraleans,Underling,2,Underground,3,7,2,0,0,5
+Titans,Cyber Underling,23,Underground,3,6,2,0,0,6
