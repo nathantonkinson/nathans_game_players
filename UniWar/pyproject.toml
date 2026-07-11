@@ -1,0 +1,6 @@
+[tool.pylance]
+extraPaths = ["src"]
+
+[project]
+name = "uniwar"
+version = "0.1.0"

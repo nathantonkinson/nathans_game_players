@@ -150,7 +150,8 @@ Can also be played on bluestacks, steam
 - tile - one cell on a map 
     - cell - synonym
     - hex - synonym
-- state - surfaceair vs underwater vs underground.
+- altitude - surfaceair vs underwater vs underground.
+    - state - former synonym, not anymore. Don't use something so generic lol
     - mode - synonym, trying to find something better
 - terrain - mountain, forest etc. Includes base, void, etc
 - map - submitted map intended for play, whatever

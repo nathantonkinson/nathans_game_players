@@ -1,34 +1,34 @@
-Race,Name,Number,Cost,Type,Repair,ActionsPerTurn,Notes
-Khraleans,Infected Marine,1,,Light Ground,1,1,Created via infection
-Khraleans,Underling,2,100,Light Ground,1,1,"Underground shennanigans. Cannot attack while underground. Cannot attack enemies underground or things directly on top of it. Cannot be targeted I think either, so defense underground is irrelevant"
-Khraleans,Borfly,3,200,Aerial,1,1,Move after attack
-Khraleans,Salamander,4,200,Amphibian,2,1,Infectious attacks
-Khraleans,Infector,5,250,Light Ground,1,1,"Infect marine, plague bomb, healing"
-Khraleans,Swarmer,6,250,Aerial,1,1,
-Khraleans,Garuda,7,350,Aerial,2,1,
-Khraleans,Kraken,8,350,Aquatic,2,1,Cannot attack ground/air from underwater
-Khraleans,Pinzer,9,450,Heavy Ground,2,1,
-Khraleans,Wyrm,10,550,Heavy Ground,1,1,Move after attack
-Khraleans,Leviathan,11,600,Aquatic,2,1,
-Sapiens,Mecha II,12,,Light Ground,1,1,"Created via reprogramming, can teleport"
-Sapiens,Marine,13,100,Light Ground,1,1,
-Sapiens,Engineer,14,200,Light Ground,1,1,"Says it can't attack after move, but it can reprogram after move. Emp, healing"
-Sapiens,Fuze,15,200,Amphibian,1,1,
-Sapiens,Marauder,16,250,Heavy Ground,1,2,Two actions
-Sapiens,Bopper,17,300,Light Ground,1,1,
-Sapiens,Tank,18,400,Heavy Ground,2,1,
-Sapiens,Submarine,19,400,Aquatic,1,1,Can attack from underwater
-Sapiens,Helicopter,20,500,Aerial,1,1,
-Sapiens,Battery,21,600,Heavy Ground,1,2,"Two actions, no attack after move"
-Sapiens,Destroyer,22,800,Aquatic,2,1,
-Titans,Cyber Underling,23,,Light Ground,1,1,"Created via assimilation, underground shennanigans. See notes on primary underling"
-Titans,Mecha,24,100,Light Ground,1,1,Teleport
-Titans,Assimilator,25,200,Light Ground,1,1,"Says it can't attack after move, but it can assimilate after move. UV, healing"
-Titans,Speeder,26,250,Heavy Ground,2,1,
-Titans,Mantisse,27,250,Amphibian,1,1,
-Titans,Guardian,28,350,Light Ground,0,1,"Tp, No repair, capture base"
-Titans,Eclipse,29,400,Heavy Ground,2,1,Teleport
-Titans,Skimmer,30,450,Aquatic,1,1,Can target things directly on top of it while underwater (and range of 2 away) so I say range = 0-2
-Titans,Plasma Tank,31,500,Heavy Ground,1,1,
-Titans,Walker,32,700,Heavy Ground,1,1,
-Titans,Hydronaut,33,800,Aquatic,2,1,
+RaceName	RaceNumber	Name	Number	Cost	UnittypeName	UnittypeNumber	Repair	ActionsPerTurn	Notes
+Khraleans	1	Infected Marine	1		Light Ground	1	1	1	Created via infection
+Khraleans	1	Underling	2	100	Light Ground	1	1	1	Underground shennanigans. Cannot attack while underground. Cannot attack enemies underground or things directly on top of it. Cannot be targeted I think either, so defense underground is irrelevant
+Khraleans	1	Borfly	3	200	Aerial	3	1	1	Move after attack
+Khraleans	1	Salamander	4	200	Amphibian	5	2	1	Infectious attacks
+Khraleans	1	Infector	5	250	Light Ground	1	1	1	Infect marine, plague bomb, healing
+Khraleans	1	Swarmer	6	250	Aerial	3	1	1	
+Khraleans	1	Garuda	7	350	Aerial	3	2	1	
+Khraleans	1	Kraken	8	350	Aquatic	4	2	1	Cannot attack ground/air from underwater
+Khraleans	1	Pinzer	9	450	Heavy Ground	2	2	1	
+Khraleans	1	Wyrm	10	550	Heavy Ground	2	1	1	Move after attack
+Khraleans	1	Leviathan	11	600	Aquatic	4	2	1	
+Sapiens	2	Mecha II	12		Light Ground	1	1	1	Created via reprogramming, can teleport
+Sapiens	2	Marine	13	100	Light Ground	1	1	1	
+Sapiens	2	Engineer	14	200	Light Ground	1	1	1	Says it can't attack after move, but it can reprogram after move. Emp, healing
+Sapiens	2	Fuze	15	200	Amphibian	5	1	1	
+Sapiens	2	Marauder	16	250	Heavy Ground	2	1	2	Two actions
+Sapiens	2	Bopper	17	300	Light Ground	1	1	1	
+Sapiens	2	Tank	18	400	Heavy Ground	2	2	1	
+Sapiens	2	Submarine	19	400	Aquatic	4	1	1	Can attack from underwater
+Sapiens	2	Helicopter	20	500	Aerial	3	1	1	
+Sapiens	2	Battery	21	600	Heavy Ground	2	1	2	Two actions, no attack after move
+Sapiens	2	Destroyer	22	800	Aquatic	4	2	1	
+Titans	3	Cyber Underling	23		Light Ground	1	1	1	Created via assimilation, underground shennanigans. See notes on primary underling
+Titans	3	Mecha	24	100	Light Ground	1	1	1	Teleport
+Titans	3	Assimilator	25	200	Light Ground	1	1	1	Says it can't attack after move, but it can assimilate after move. UV, healing
+Titans	3	Speeder	26	250	Heavy Ground	2	2	1	
+Titans	3	Mantisse	27	250	Amphibian	5	1	1	
+Titans	3	Guardian	28	350	Light Ground	1	0	1	Tp, No repair, capture base
+Titans	3	Eclipse	29	400	Heavy Ground	2	2	1	Teleport
+Titans	3	Skimmer	30	450	Aquatic	4	1	1	Can target things directly on top of it while underwater (and range of 2 away) so I say range = 0-2
+Titans	3	Plasma Tank	31	500	Heavy Ground	2	1	1	
+Titans	3	Walker	32	700	Heavy Ground	2	1	1	
+Titans	3	Hydronaut	33	800	Aquatic	4	2	1	

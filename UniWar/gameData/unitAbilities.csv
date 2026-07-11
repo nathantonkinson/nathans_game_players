@@ -1,59 +1,59 @@
-UnitName	UnitNumber	AbilityName	AbilityNumber	Notes	Cooldown	RepairMultiplier	ResurfaceBonus	MoveAfterAttackMobility
-Engineer		Attack	1					
-Assimilator		Attack	1					
-Infector		Attack	1					
-Engineer		Capture Base	2					
-Assimilator		Capture Base	2					
-Infector		Capture Base	2					
-Infected Marine		Capture Base	2					
-Underling		Capture Base	2					
-Salamander		Capture Base	2					
-Mecha II		Capture Base	2					
-Marine		Capture Base	2					
-Fuze		Capture Base	2					
-Cyber Underling		Capture Base	2					
-Mecha		Capture Base	2					
-Mantisse		Capture Base	2					
-Guardian		Capture Base	2					
-Bopper		Capture Base	2					
-Infector		Infect	3					
-Engineer		Reprogram	4					
-Assimilator		Assimilate	5					
-Guardian		Repair	6					
-Engineer		EMP	7	Current turn included in cooldown	10			
-Assimilator		UV	8	Current turn included in cooldown	11			
-Submarine		Dive	9					
-Kraken		Dive	9					
-Skimmer		Dive	9					
-Underling		Bury	10					
-Cyber Underling		Bury	10					
-Infector		PlagueAbility	11					
-Engineer		RepairBoost	15			2		
-Assimilator		RepairBoost	15			2		
-Infector		RepairBoost	15			3		
-Submarine		Resurface	16	Actual bonus unknown			3	
-Kraken		Resurface	16	Actual bonus unknown			3	
-Skimmer		Resurface	16	Actual bonus unknown			3	
-Underling		Resurface	16	Actual bonus unknown			4	
-Cyber Underling		Resurface	16	Actual bonus unknown			4	
-Salamander		PlagueForce	17					
-Marine		PlagueVulnerability	18					
-Fuze		PlagueVulnerability	18					
-Marauder		PlagueVulnerability	18					
-Bopper		PlagueVulnerability	18					
-Tank		PlagueVulnerability	18					
-Helicopter		PlagueVulnerability	18					
-Battery		PlagueVulnerability	18					
-Destroyer		PlagueVulnerability	18					
-Battery		Attack After Move	20					
-Walker		Attack After Move	20					
-Borfly		Attack After Move	20					
-Borfly		Move After Attack	21					6
-Wyrm		Move After Attack	21					4
-Helicopter		Move After Attack	21					6
-Speeder		Move After Attack	21					6
-Kraken		AttackSurfaceAirFromUnderwater	22					
-Skimmer		AttackSurfaceAirFromUnderwater	22		4			
-Mecha		Teleport	23	listed with current turn and disable part included	4			
-Guardian		Teleport	23	listed with current turn and disable part included	5			
-Eclipse		Teleport	23	listed with current turn and disable part included				
+UnitName	UnitNumber	AbilityName	AbilityNumber	Notes	Cooldown	AbilityStrength
+Engineer	14	Attack	1			
+Assimilator	25	Attack	1			
+Infector	5	Attack	1			
+Engineer	14	Capture Base	2			
+Assimilator	25	Capture Base	2			
+Infector	5	Capture Base	2			
+Infected Marine	1	Capture Base	2			
+Underling	2	Capture Base	2			
+Salamander	4	Capture Base	2			
+Mecha II	12	Capture Base	2			
+Marine	13	Capture Base	2			
+Fuze	15	Capture Base	2			
+Cyber Underling	23	Capture Base	2			
+Mecha	24	Capture Base	2			
+Mantisse	27	Capture Base	2			
+Guardian	28	Capture Base	2			
+Bopper	17	Capture Base	2			
+Infector	5	Infect	3			
+Engineer	14	Reprogram	4			
+Assimilator	25	Assimilate	5			
+Guardian	28	Repair	6			
+Engineer	14	EMP	7	Current turn included in cooldown	10	
+Assimilator	25	UV	8	Current turn included in cooldown	11	
+Submarine	19	Dive	9			
+Kraken	8	Dive	9			
+Skimmer	30	Dive	9			
+Underling	2	Bury	10			
+Cyber Underling	23	Bury	10			
+Infector	5	PlagueAbility	11			
+Engineer	14	RepairBoost	15			2
+Assimilator	25	RepairBoost	15			2
+Infector	5	RepairBoost	15			3
+Submarine	19	Resurface	16	Actual bonus unknown		3
+Kraken	8	Resurface	16	Actual bonus unknown		3
+Skimmer	30	Resurface	16	Actual bonus unknown		3
+Underling	2	Resurface	16	Actual bonus unknown		4
+Cyber Underling	23	Resurface	16	Actual bonus unknown		4
+Salamander	4	PlagueForce	17			
+Marine	13	PlagueVulnerability	18			
+Fuze	15	PlagueVulnerability	18			
+Marauder	16	PlagueVulnerability	18			
+Bopper	17	PlagueVulnerability	18			
+Tank	18	PlagueVulnerability	18			
+Helicopter	20	PlagueVulnerability	18			
+Battery	21	PlagueVulnerability	18			
+Destroyer	22	PlagueVulnerability	18			
+Battery	21	Attack After Move	20			
+Walker	32	Attack After Move	20			
+Borfly	3	Attack After Move	20			
+Borfly	3	Move After Attack	21			6
+Wyrm	10	Move After Attack	21			4
+Helicopter	20	Move After Attack	21			6
+Speeder	26	Move After Attack	21			6
+Kraken	8	AttackSurfaceAirFromUnderwater	22			
+Skimmer	30	AttackSurfaceAirFromUnderwater	22			
+Mecha	24	Teleport	23	listed with current turn and disable part included	4	
+Guardian	28	Teleport	23	listed with current turn and disable part included	4	
+Eclipse	29	Teleport	23	listed with current turn and disable part included	5	
