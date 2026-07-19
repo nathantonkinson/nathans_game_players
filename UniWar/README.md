@@ -1,6 +1,7 @@
 # Uniwar solver
 
 Project to try to make better computer players for uniwar
+https://github.com/nathantonkinson/nathans_game_players 
 
 https://www.uniwar.com/home.page
 https://play.google.com/store/apps/details?id=android.uniwar 

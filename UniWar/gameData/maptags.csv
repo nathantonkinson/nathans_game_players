@@ -1,10 +1,11 @@
-Name	Number	Notes
-NOFOW	1	Special since it can generate credits and build units
-RNG	2	Same rng through whole game no matter how many times you play it. Seed 123. EG RNG123
-BLITZ	3	Number of minutes per move from when you open it. Could be used to limit AI calc time, but we'd want to restrict to milliseconds or something
-BLITZMS	4	Same as BLITZ but is number of milliseconds for AI
-BLIM	5	After number of turns bases no longer produce credits/crystals
-RNGBUILD	6	Bases produce random units from your race each turn
-RNGBUILDANY	7	Bases produce random units from any race each turn
-BOOTCAMP	8	Amount of xp unit gets from sitting on city
-TTL	9	Limits turns to x minutes. Global vs when open
+Name	Number	Notes	
+NOFOW	1	Special since it can generate credits and build units	
+RNG	2	Same rng through whole game no matter how many times you play it. Seed 123. EG RNG123	
+BLITZ	3	Number of minutes per move from when you open it. Could be used to limit AI calc time	 but we'd want to restrict to milliseconds or something
+BLITZMS	4	Same as BLITZ but is number of milliseconds for AI	
+BLIM	5	After number of turns bases no longer produce credits/crystals	
+RNGBUILD	6	Bases produce random units from your race each turn	
+RNGBUILDANY	7	Bases produce random units from any race each turn	
+BOOTCAMP	8	Amount of xp unit gets from sitting on city	
+TTL	9	Limits turns to x minutes. Global vs when open	
+DETERMINISTIC	10	Nathan added this – deterministic damage (rounds up/down on 0.5). Default uses random	

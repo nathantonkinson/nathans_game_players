@@ -1,4 +1,4 @@
-Name	Number	AttackModifier	Notes
+Name	Number	AttackBonus	Notes
 Surfaceair	1	0	
-Underwater	2	2	Cannot overlap with underground, fyi (water road)
-Underground	3	100	Nothing can attack anything else underground (no data values listed) and can't overlap (friend or foe). Express attack penalty some other way?
+Underwater	2	-2	Cannot overlap with underground fyi (water road)
+Underground	3	-100	Nothing can attack anything else underground (no data values listed) and can't overlap (friend or foe). Express attack penalty some other way?

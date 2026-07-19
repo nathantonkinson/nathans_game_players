@@ -3,6 +3,7 @@ from math import comb
 import random
 
 #h=hp of the unit dealing damage, p is prob threshold calculated from atk def and piercing, and x is the dmg qty we are asking the probability of
+
 def dmg_byMath(h, p, x): #correct (at least quite close)
     n = 12 * h
     lo = 12 * x
@@ -10,7 +11,7 @@ def dmg_byMath(h, p, x): #correct (at least quite close)
     return sum(comb(n, k) * p**k * (1-p)**(n-k) for k in range(lo, hi+1))
 
 def dmg_bySim(h, p, x, s):
-
+    #calculate probability of damage qty x using s number of simulations
     dmgIsX = 0
     for _ in range(s):
         hits = 0
@@ -25,6 +26,7 @@ def avg_bySimple(h, p): #NOT CORRECT
     return h*p
 
 def avg_bySim(h, p, s):
+    #calculate the probability of each possible damage qty and average them, using s simulations for each x
     dmg = 0
     if h>12: raise RuntimeError("H can't be larger than 12")
     for x in range(0, 13, 1): #1 to 12
@@ -32,6 +34,7 @@ def avg_bySim(h, p, s):
     return dmg
     
 def avg_byMath(h, p):
+    #calculate average damage expected using the fancy math instead of simulations 
     dmg = 0
     if h>12: raise RuntimeError("H can't be larger than 12")
     for x in range(0, 13, 1): #1 to 12
@@ -40,6 +43,6 @@ def avg_byMath(h, p):
 
 # print(dmg_byMath(6, 0.7, 5))
 # print(dmg_bySim(6, 0.7, 5))
-print(avg_bySimple(6, 0.7))
+# print(avg_bySimple(6, 0.7))
 print(avg_bySim(6, 0.7, 10000))
 print(avg_byMath(6, 0.7))

@@ -1,33 +1,39 @@
 from dataclasses import dataclass, is_dataclass, fields
+import numpy as np
+import sys
+import time
 
 #these are individual files. I want to import all classes from them. Idk if this is best practice.
-from src.loader import Loader
-from src.gameDataClasses import GameData, GameState
+from src.data.loader import Loader
+# import src.gameDataClasses as dc
+import src.data.generated_constants as gc
+from src.data.gameDataClasses import GameData, GameState, clsAction, clsHex
+import src.data.flattening as f
 from src.engine.engine import Engine
 
 
 
-#we should be able to avoid calling AvailableMoves again if no enemy units killed. Just can't move into place previous piece did, and new spot maybe opened up? So available moves should include friendly spaces? (and maybe enemy too, if doesn't violate ZOC)
-#should we do cleansing before loading to data classes, or after?
-
 myLoader = Loader()
-
-myGameData: GameData = myLoader.load_gameData()
+myGameData: GameData = myLoader.load_GameData()
 myGameState: GameState = myLoader.load_map("plainsLine.yaml")
 myEngine: Engine = Engine(myGameState, myGameData)
+myGameData = f.allFlattening(myGameData)
 
 
-# print(myEngine.GameData.)
+# #DO THE ATTACK MANUALLY
+# print(myGameState.Units.UnitHexes)
+# print(myGameState.Units.UnitHps)
+# myAction = clsAction(0, 1, clsHex(0, 2, 1), 1, clsHex(0, 2, 1))
+# myEngine.applyAction(myAction)
+# print(myGameState.Units.UnitHexes)
+# print(myGameState.Units.UnitHps)
 
-#let's do the HexUnits cleansing at some point
+#don't forget data validation
+#and map cleansing, maybe
+            
+
+#might be a good exercise to run every unit on every terrain vs every unit on every terrain
+    #technically for generating all possible p values, but also just good exercise
 
 
 
-
-
-#don't forget validation
-
-#let's now manually send actions to the engine
-#the engine has an internal GameState, is created from a GameState, takes in actions to alter state, exposes functions like available moves
-
-#let's check

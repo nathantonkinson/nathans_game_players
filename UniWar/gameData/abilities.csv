@@ -1,25 +1,27 @@
-Name,Number,RequiresAction,Default,AllowMovement,Notes,,,,,,
-Attack,1,1,1,1,Includes move before and maybe attack after. Not for engineer/assimilator/infector,,,,,,
-Capture Base,2,1,0,1,Can move before,,,,,,
-Infect,3,1,0,1,Can move before,,,,,,
-Reprogram,4,1,0,1,Can move before,,,,,,
-Assimilate,5,1,0,1,Can move before,,,,,,
-Repair,6,1,0,0,Not for guardian lol,,,,,,
-EMP,7,1,0,0,CANNOT DO THIS AFTER MOVE. Cooldown 10,,,,,,
-UV,8,1,0,0,CANNOT DO THIS AFTER MOVE. Cooldown 11,,,,,,
-Dive,9,1,0,0,for underwater,,,,,,
-Bury,10,1,0,0,for underground,,,,,,
-PlagueAbility,11,1,0,1,"UI calls it a ""special ability""",,,,,,
-Zone Of control,12,0,1,,Is there a way we can temporarily disable this for EMP turn???,,,,,,
-Veterancy,13,0,1,,+1 atk bonus per level. No need to exclude from the noncombatants,,,,,,
-Gang Up Bonus,14,0,1,,Omg I'll need to track where the last attack came from jeesh,,,,,,
-RepairBoost,15,0,0,,,,,,,,
-Resurface,16,0,0,,Kraken 3, underling 4, sub 0, skimmer 0 FALSE. Since bury/submerge is an action, can't infinite. Just don't allow popup and sumbmerge on same turn,,
-PlagueForce,17,0,0,,"UI calls it a ""special force""",,,,,,
-PlagueVulnerable,18,0,0,,Only for sapiens, and no subs or engineers (or mecha II). Might need to confirm this,,,,,
-Cities,19,0,1,,,,,,,,
-Attack After Move,20,0,1,,,,,,,,
-Move After Attack,21,0,0,,also called out in units sheet...,,,,,,
-AttackSurfaceAirFromUnderwater,22,0,1,,sub can, kraken and skimmer cannot,,,,,
-Teleport,23,1,0,0,Disabled for 1 turn after (so on same turn as TP, could do 2 turn disable), then cooldown (mecha 2, eclipse 3, guardian 2); guardian, mecha, and eclipse
-Move,24,1,1,1,Movement without attacking or anything,,,,,,
+Name	Number	RecordExists	RequiresAction	Default	AllowMovement	Notes
+Attack	1	1	1	1	1	Includes move before and maybe attack after. Not for engineer/assimilator/infector
+Capture Base	2	1	1	0	1	Can move before
+Infect	3	1	1	0	1	Can move before
+Reprogram	4	1	1	0	1	Can move before
+Assimilate	5	1	1	0	1	Can move before
+Repair	6	1	1	0	0	Not for guardian lol
+EMP	7	1	1	0	0	CANNOT DO THIS AFTER MOVE. Cooldown 10
+UV	8	1	1	0	0	CANNOT DO THIS AFTER MOVE. Cooldown 11
+Dive	9	1	1	0	0	for underwater
+Bury	10	1	1	0	0	for underground
+PlagueAbility	11	1	1	0	1	"UI calls it a ""special ability"""
+Zone Of control	12	1	0	1		Is there a way we can temporarily disable this for EMP turn???
+Veterancy	13	1	0	1		+1 atk bonus per level. No need to exclude from the noncombatants
+Gang Up Bonus	14	1	0	1		Omg I'll need to track where the last attack came from jeesh
+RepairBoost	15	1	0	0		
+ResurfaceAttack	16	1	1	0		Kraken 3 | undering 4 | sub 0 | skimmer ?not 0 | no issues with infinite since actions involved
+PlagueForce	17	1	0	0		"UI calls it a ""special force"""
+PlagueVulnerable	18	1	0	0		Only for sapiens and subs and engineerss and mecha II immune
+Cities	19	1	0	1		
+Attack After Move	20	1	0	1		
+Move After Attack	21	1	0	0		also called out in units sheet...
+AttackSurfaceAirFromUnderwater	22	1	0	1		sub can | kraken and skimmer cannot
+Teleport	23	1	1	0	0	Disabled for 1 turn after (so on same turn as TP could notate as 2 turn disable) then cooldown (mecha 2 | eclipse 3 | guardian 2);
+Move	24	1	1	1	1	Movement without attacking or anything
+ResurfaceNoattack	25	1	1	0	0	
+PassTurn	26	1	0	1		
