@@ -8,67 +8,92 @@ MAXDISTANCE = 5
 X = 0
 Y = 1
 ALT = 2
-
-# Constants (manual) for new table from flattening COMBAT 
-AP = 0
-DP = 1
-
-# Constants for Abilities
+DEFAULTALTITUDE = 1
+# Constants for each source table
 RECORDEXISTS = 0
 REQUIRESACTION = 1
 DEFAULT = 2
 ALLOWMOVEMENT = 3
 
-# Constants for Altitudes
+NAME = 0
+NOTES = 1
+
 ATTACKBONUS = 0
 
-# Constants for Maptags
 NAME = 0
+NOTES = 1
 
-# Constants for Races
 NAME = 0
+NOTES = 1
 
-# Constants for TerrainAltitudes
+NAME = 0
+NOTES = 1
+
 ALLOWED = 0
 
-# Constants for Terrains
 NAME = 0
+NOTES = 1
 
-# Constants for UnitAbilities
 RECORDEXISTS = 0
 COOLDOWN = 1
 ABILITYSTRENGTH = 2
 
-# Constants for UnitAltitudes
 MOBILITY = 0
 VISION = 1
 ATTACKRANGEMIN = 2
 ATTACKRANGEMAX = 3
 DEFENSE = 4
 
-# Constants for Units
 RACENUMBER = 0
 COST = 1
 UNITTYPENUMBER = 2
-REPAIR = 3
+REPAIRRATE = 3
 ACTIONSPERTURN = 4
 
-# Constants for UnitTerrains
-ATTACKBONUS = 0
-DEFENSEBONUS = 1
-MOVEMENTALLOWED = 2
-MOBILITYCOST = 3
-
-# Constants for Unittypes
 NAME = 0
+NOTES = 1
+ABBREVIATION = 2
 
-# Constants for UnittypeTerrains
 ATTACKBONUS = 0
 DEFENSEBONUS = 1
 MOVEMENTALLOWED = 2
 MOBILITYCOST = 3
 
-# Constants for UnitUnittypeAltitudes
+NAME = 0
+NOTES = 1
+
+ATTACKBONUS = 0
+DEFENSEBONUS = 1
+MOVEMENTALLOWED = 2
+MOBILITYCOST = 3
+
 STRENGTH = 0
 ARMORPIERCING = 1
 
+# Constants for Ability numbers 
+ATTACK = 1
+CAPTUREBASE = 2
+INFECT = 3
+REPROGRAM = 4
+ASSIMILATE = 5
+REPAIR = 6
+EMP = 7
+UV = 8
+DIVE = 9
+BURY = 10
+PLAGUEABILITY = 11
+ZONEOFCONTROL = 12
+VETERANCY = 13
+GANGUPBONUS = 14
+REPAIRBOOST = 15
+RESURFACEATTACK = 16
+PLAGUEFORCE = 17
+PLAGUEVULNERABLE = 18
+CITIES = 19
+ATTACKAFTERMOVE = 20
+MOVEAFTERATTACK = 21
+ATTACKSURFACEAIRFROMUNDERWATER = 22
+TELEPORT = 23
+MOVE = 24
+RESURFACENOATTACK = 25
+PASSTURN = 26

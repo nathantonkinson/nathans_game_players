@@ -1,16 +1,20 @@
-# Uniwar solver
+# Uniwar solver front matter
 
 Project to try to make better computer players for uniwar
 https://github.com/nathantonkinson/nathans_game_players 
 
+The game itself
 https://www.uniwar.com/home.page
 https://play.google.com/store/apps/details?id=android.uniwar 
 Can also be played on bluestacks, steam
+I don't own this game or anything. Don't use this codebase to try and rip them off and make money or anything. Besides, I'm not a good programmer lol.
 
 
 # Mechanics/rules/UI
-- hashtag commands
-- vision persisting
+- random pure UI things
+    - vision persist for pro
+    - kd recordkeeping
+    - effeciency calculation
 - damage mechanic
     - [Link to spank's janky uniwar calculator](https://docs.google.com/spreadsheets/d/1e7OUe35zL6X2NbSPIwrTGR9NpJ-h-ATceUM90gxSsE8/edit#gid=1537685831)
     - https://unicalc.github.io/web/
@@ -19,11 +23,20 @@ Can also be played on bluestacks, steam
     - attempt to back into it via symbolic regression
         - I had TuringBot_3.3.1_windows64.exe in here but it's too big for github so it's in .gitignore, but you can download it yourself. Also we don't need it because Spanky's Janky uniwar calculator I think has the true accurate code/process
     - new numbers generated start of each turn right, not across whole game?
-- advanced rules/mechancis
-    - heavy ground on buried underling
-    - buried can't attach each other
-    - sub vs underling on water road etc etc
+- teams
+    - same team do not have ZOC against you and you can move through them
+    - cannot heal boost friendlies
+- altitudes (submerged, underground)
+    - heavy ground damage buried underling if they end their action (or also move?) there
+    - buried can't attack each other, they also don't have ZOC
+    - sub vs underling on bridge - they can't both be under at the same time. So you could maybe say it's the same layer/altitude, but underlings would need special stuff to say no ZOC or atk
+    - ? can build sub under friendly or enemy unit on water base?
     - popup bonus for underling and sub/kraken = 4 per uniwar.com. Need to recalc these. Skimmer definitely has a bonus
+    - ? sub zone of control? I don't think so, not against surface anyway
+    - no fow can target subs
+    - subs can see each other from more than adjacent. What range exactly? I guess just underwater vision?
+    - submerged kraken can attack underling when underling on road, but not when it's on land... interesting
+- special abilities (emp, capture, convert)
     - tp no zone of control
     - emp no zone of control
     - can't convert capturing unit
@@ -31,15 +44,13 @@ Can also be played on bluestacks, steam
     - uv not affecting underwater? what about buried?
     - engineer immune to plage, same with submarine
     - uv affects both sapien and kraahl
+    - plague affects all other sapiens, spreads at start of turn of being infected unit from any adjacent?
+- other advanced mechanics
     - map starting credits to all first turn. 1st player doesn't get base income
     - terrain bonuses are by unit type, not specific unit
     - glitch where move after attack allows a unit to live
     - can't attack what you can't see
-    - ? can build sub under friendly or enemy unit on water base?
-    - plague affects all other sapiens, spreads at start of turn of being infected unit from any adjacent?
-    - ? sub zone of control?
-    - no fow can target subs
-- map hashtags
+- map hashtags (some mechanical, some not)
     - #SPC - turns Single Player Challenge mode for the map. The games are automatically started vs BOT and can be easily restarted.
     - #TEAM - enables team mode for this SPC map.
     - #NOFOW - disable Fog Of War for this SPC map.
@@ -49,6 +60,14 @@ Can also be played on bluestacks, steam
     - #BLIM5 - 5 is the round number during the game when the bases get depleted and do not produce crystals anymore. Cities, however, provide crystals during the whole game.
     - #RNGBUILD - fun game mode that makes all your empty bases to build random units for free. This way players do not have control on what to build.
     - #RNGBUILDANY - same as above, but player bases build random units of any race. Even more fun!
+    - #editstats - map has different unit stats
+    - #TTL120 - total time limit across all turns
+- Other hashtags (nonmechanical)
+    - #help - idk what this does
+    - #needtime - 
+    - #showmercy - resets opponent timer
+    - #nohurry - resents opponent timer
+    - #brawl - enlist/unenlist from brawl games
 - known ways to exploit existing AIS
 
 # Stragegy/heuristics
@@ -66,7 +85,6 @@ Can also be played on bluestacks, steam
 - Add different unit types, races
 - Big threshold adding healing
 - Big threshold adding income/bases/capturing
-
 # Architecture plan for uniwar (object based)
 - at root will be executable "main" stuff.. or should that still be src? Nah. We will want to run the low level stuff manually, still put in src but do lightweight mains on outside?? Then step debug doesn't work... does it?
 - src folder for all the engine code stuff
@@ -105,8 +123,9 @@ Can also be played on bluestacks, steam
     - Do we build in the results of actions to this or not?
 - Game history class
     - The initial map/game state (probably contains full map data, not just a link to the map)
-    - List of move class
-    - Somehow also need the results (damage and stuff), 
+    - List of move class (smaller than copies of state)
+    - Checkpoints along the way with full state?
+    - Damage results derivable from rng state etc
 - Game engine class
     - versions that are much simpler, version that are more complicated or full
     - runs a single game
@@ -124,12 +143,38 @@ Can also be played on bluestacks, steam
     - for 1 to 100
     - initialize engine
     - pass state to player, get move from player, pass that to engine, get state back
-- Submissions folder in the github whose members inherit player class
+- AI stuff
+    - Players/decision functions - accept state and output an action
+        - Policy head is one option
+    - Value/heuristic functions - put scores of some kind on gamestates
+        - Fast (no calls to splitters)
+            - Manual heuristic
+            - Neural net (value head(s))
+        - Slow - involve looking into the future
+        - Win/loss prediction vs stability measure (Quiescence) vs other measures (??)
+    - Search/pruning functions - choose which actions to explore - slightly different purpose than players/decisions
+        - MCTS weights
+        - Minimax
+        - "Move ordering" meaning try the best moves first - maybe not useful in mcts? But should be in minimax
+        - We will need some very strong deduping (actual dups and maybe things that are close too)
+    - Trainers - kind of have to be specific to the heuristic or player
+        - Genetic to train nets
+        - Some kind of genetic on the adjustable parameters of manual heuristic
+        - Train on high skill histories
+        - Play vs self or others, whatever
+    - Evaluator(s)
+        - Play AIs against each other to develop an ELO, or play against a standard (like random) and rank/elo/score is win% or win speed or whatever
+        - Map choices
 - Maps folder (These are just game states)
 - Match history folder containing game history
 - Visualizer class
-    - 
-
+    - Click through a replay/history
+    - Human vs AI
+    - Click through two AIs playing
+    - Human vs. AI with tools for human
+        - choose between a curated selection of whole turns (evaluated by a chosen fast or slow heuristic)
+        - see curated tree
+\
 # Architecture tweaks for AI
 - several arrays faster than objects (classes)
 - map
@@ -141,30 +186,33 @@ Can also be played on bluestacks, steam
 - ?? wrap core functions in numba jit?? I don't know what this means
 - probs the "available moves" function returns the deltas of future states from current (atk and def unit)
     - separate each action, and atk vs move vs else whatever
-
 # Best practice stuff
-- all folders are packages with __init__.py in them, so that if I move files around inside the package, it still works
-- all files have a hardcoded reference back to root (can't really do helper function because I can't find helper if I can't find root lol)
-- run/test all code from top level main folder
+- all folders are packages with __init__.py in them, so that if I move files around inside the package, it still works.. I haven't tested this fully
+- run/test all code from top level main folder, other files import using folder structure... eh not sure how that works with packages.
 
 # Glossary
-- tile - one cell on a map 
+- hex - denoted by x, y 
     - cell - synonym
-    - hex - synonym
+    - tile - synonym
+    - square - synonym
+- location - denoted by x, y, and altitude
+    - slot - synonym
 - altitude - surfaceair vs underwater vs underground.
     - state - former synonym, not anymore. Don't use something so generic lol
-    - mode - synonym, trying to find something better
+    - mode - synonym
 - terrain - mountain, forest etc. Includes base, void, etc
-- map - submitted map intended for play, whatever
-- game state - mid state of game, compatible with map
+- map - xy matrix of terrain numbers/types
+    - alternate definition - map available for play, equivalent to a game state
+- game state - mid state of game, compatible with map 2nd def
 - action - normal units get one per turn. things that require action like attack, heal, assimilate, plague. Some allow movement before
 - ability - active and passive abilities that units have
 - force - can use this to refer to passive abilities
 - unit - all moveable units
 - race - sapiens, titans, krahleans
 - null - no unit at this location, or whatever
-    - -1 - can use neg1 as well
+    - -1
     - None - the python data type for missing/empty
     - missing
     - empty
+    - 255 or whatever is at upper limit of numeric type, often displays as -1
 

@@ -17,6 +17,9 @@ from src.data.gameDataClasses import GameData, GameState
 #get root directory of uniwar
 mydir = Path(__file__).resolve().parent #we assume loader is in src/data/ and gameData is in the root of the project, so we can use BASE_DIR to get to it
 root_dir = mydir.parent.parent
+#here is something from replit to get the directory this file is in. Idk if useful
+# _HERE = os.path.dirname(os.path.abspath(__file__))
+# sys.path.insert(0, _HERE)
 
 class Loader:
     def __init__(self):
@@ -124,14 +127,46 @@ class Loader:
         #             return args[1]  # numpy.dtype(np.uint8)
         #     return None
 
+        def is_string_array_field(t):
+            """Detect NDArray[np.str_] or NDArray[str] or Optional[...] variants."""
+            # t = f.type
+            
+            # return t is np.str_ or t is str or get_origin(t) is np.ndarray and get_args(t)[1] in (np.str_, str)
+        
+            # Direct NDArray[np.str_]
+            if get_origin(t) is np.ndarray:
+                args = get_args(t)
+                if len(args) == 2 and args[1] in (np.str_, str):
+                    return True
+
+            # Optional[NDArray[np.str_]]
+            origin = get_origin(t)
+            if origin is Union:
+                for arg in get_args(t):
+                    if get_origin(arg) is np.ndarray:
+                        aargs = get_args(arg)
+                        if len(aargs) == 2 and aargs[1] in (np.str_, str):
+                            return True
+
+            return False
+                
+        def is_optional_dataclass(t):
+            origin = get_origin(t)
+            if origin is Union:
+                args = get_args(t)
+                # Optional[X] is Union[X, NoneType]
+                return any(is_dataclass(a) for a in args)
+            return False
+
         for f in fields(cls):
             value = data.get(f.name)
 
-            # print(f.name, f.type, value)
-
             # Nested single dataclass
-            if is_dataclass(f.type):
-                kwargs[f.name] = self.from_dict(f.type, value)
+            if is_dataclass(f.type) or is_optional_dataclass(f.type):
+                if value is None: #field of parent dataclass omitted due to optional, so no data for this dataclass instance
+                    kwargs[f.name] = None
+                else:
+                    kwargs[f.name] = self.from_dict(f.type, value)
 
             # List of dataclasses
             elif (getattr(f.type, "__origin__", None) is list and is_dataclass(f.type.__args__[0])):
@@ -147,9 +182,13 @@ class Loader:
                 dtype = f.metadata.get("dtype", None)
                 kwargs[f.name] = np.array(value, dtype=dtype)
 
+            elif is_string_array_field(f.type):
+                kwargs[f.name] = np.array(value, dtype='U128') #128 chacters
+
             # Normal field
             else:
                 kwargs[f.name] = value
+
 
         return cls(**kwargs)
 
@@ -186,7 +225,7 @@ class Loader:
 
         #LOOP
         for loadtable in dc.gamedata_raw_structure:
-            dictlist = self.load_csv(self.gameData_dir / f"{loadtable['name']}.csv")
+            dictlist = self.load_csv(self.gameData_dir / f"{loadtable['csv']}.csv")
             
             #solo cols
             maxes = [0]*len(loadtable["solo_cols"]) #not doing min since negative indexes go from other end (can't do negatives for real)
@@ -208,12 +247,16 @@ class Loader:
                         out[index_solo + (c,)] = self.coerce(dict[col], loadtable["dtype"]) 
                     except:
                         # print(dict[col]) #blank
-                        print(loadtable['name'], index_solo + (c,), col, "dc" + dict[col], loadtable["dtype"])
+                        print(loadtable['csv'], index_solo + (c,), col, "dc" + dict[col], loadtable["dtype"])
                         print(type(dict[col]))
                         print(len(dict[col]))
                         raise RuntimeError("hey")
             out.flags.writeable = False
-            fields[loadtable["name"]] = out
+            if "field" in loadtable:
+                field = loadtable["field"]
+            else:
+                field = loadtable["csv"]
+            fields[field] = out
         
         return GameData(**fields)
         # return fields

@@ -1,17 +1,17 @@
-Name,Number,Notes
-Base,15,Special since it can generate credits and build units
-Bridge,7,"Interesting since both underwater and underground, need more testing on game functionality"
-Chasm,12,
-City,10,
-Desert,8,looks like hills
-Forest,4,
-Harbor,2,Special since it can build units
-Medical,5,
-Mountain,3,
-Ocean,14,
-Plain,1,
-Reef,11,
-Road,6,
-Swamp,9,
-Void,16,I don't know if we're going to need this or not. Idk how to count ranged attacks through stuff.
-Water,13,
+Name	Number	Color_inVisualizer	Notes
+Plain	1		
+Harbor	2		Special since it can build units
+Mountain	3		
+Forest	4		
+Medical	5		
+Road	6		
+Bridge	7		Interesting since both underwater and underground. Need more testing on game functionality
+Desert	8		looks like hills
+Swamp	9		
+City	10		
+Reef	11		
+Chasm	12		
+Water	13		
+Ocean	14		
+Base	15		Special since it can generate credits and build units
+Void	16		I don't know if we're going to need this or not. Idk how to count ranged attacks through stuff.

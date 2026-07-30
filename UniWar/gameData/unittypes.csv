@@ -1,6 +1,6 @@
-Name,Number,Notes
-Light Ground,1,
-Heavy Ground,2,
-Aerial,3,
-Aquatic,4,"Submerged is a state, not a unittype"
-Amphibian,5,
+Name	Number	Notes
+Light Ground	1	
+Heavy Ground	2	Will damage underground underlings if they end movement on them.
+Aerial	3	
+Aquatic	4	Submerged is a state, not a unittype
+Amphibian	5	

@@ -12,10 +12,84 @@ import numpy as np
 import math
 
 import src.data.generated_constants as gc
-from src.data.gameDataClasses import GameData, GameState, clsAction, clsHex
+from src.data.gameDataClasses import GameData, GameState, clsAction, clsLoc
 
 
-#ACTIONS
+#region FLATTEN STRAT (kindof old)
+
+#we will only pass the minimal information required to the neural net, and in the form of 1D arrays
+    #this is GameState.Units and GameState.MetadataCurrent
+#engine can (not required) to maintain some other info for it's own effeciency
+    #see engine for details
+
+#POTENTIAL GAMEDATA FLATTENING for optimization of engine (not net)
+    #FLATTEN OPS
+        #DONE adding to unitTerrains from unittypeTerrains, making the latter obsolete
+        #flattened UnitUnittypeAltitudes by listing each unit from the unittype... meh
+        # use the default logic to add an actions [] list to each unit
+            #actions per unit is currently in Units but could be in abilities instead. Visa versa with some abilities
+            #do passives? probably yes
+        #more? primary load is AI, not engine, but nice to optimize engine too
+    #USE CASE LOOKUPS, separated
+        #ACT: ability list: unitAbilities flattened into a units field as an array
+            #needs to be modified if emp... otherwise fine?
+        #MOV: 
+        #   mobility: unitAltitudes
+        #   movement allowed: terrainAltitudes
+        #   cost: unittypeTerrains flattened added into unitTerrains
+        #   ?? does vision matter?
+        #ATK: 
+        #   atk range: unitAltitudes
+        #   atk base: unitUnittypeAltitude, maybe flattened into unitUnit(defender)Altitude
+        #   terrain bonus (both): unittypeTerrains flattened added into unitTerrains
+        #   altitude bonus: Altitudes (for submerged)
+        #   defense base: unitAltitudes
+    #USE CASE VERY FLAT
+        #ACT: ability list: unitAbilities flattened into a units field as an array
+            #shape: U, A, 3 (exists, cooldown, strength)
+        #MOV:
+            #one-time retrievals
+                #unit number, unit type
+                #altitude
+                #mobility: unitAltitudes
+            #****ZOC: (does unit exist here), hexUnits
+            #****movement cost: (one table) combination of unittypeTerrains>unitTerrains (cost), terrainAltitudes (allowed)
+                #unit 
+                #***terrain - this requires lookup on map, but map static hopefully helps
+                #altitude (doesn't exist or cost = 100 or something = not allowed)
+        #ATK
+            #one-time retrievals
+                #unit type
+                #unit number
+                #altitude (atk penalty submerged)
+                #rangemin and max (from unitAltitudes)
+            #frequent lookup (one table - gets a p-value)
+                #attacker unit number
+                #***defending unit type (or unit)
+                #***defending altitude
+                #attacking unit terrain
+                #***defending unit terrain
+
+    #Remaining tables:
+        #Units (repair rate, actions/turn) 
+        #UnitAbilities (hm... may want this separate because cooldown and strength are separate)
+            #Abilities (some of it should be hardcoded, the rest (defaults) flattened into Units)
+        #Altitudes (for submerged penalty)
+        #TerrainAltitudes (movement allowed)
+        #UnitAltitudes (mobility, defense base, atk range)
+        #UnitTerrains (atk/def bonus, mobility cost)
+            #UnittypeTerrains
+        #UnitUnitAltitudes (not a base table, used for atk base)
+            #UnitUnittypeAltitudes
+        
+        #UNUSED
+            #Maptags (names only / hardcoded)
+            #Races (names only)
+            #Terrains (names only)
+            #UnitTypes (names only)
+#endregion flatten strat
+
+
 def flattenUnitAbilities(GameData: GameData):
     # GameData.UnitAbilities #specifics
     # GameData.Abilities #defaults
@@ -51,7 +125,7 @@ def flattenUnitTerrains(GameData: GameData):
 
     out = np.zeros((
         len(GameData.Units)
-        , len(GameData.Terrains)
+        , len(GameData.Terrains_Name)
         , GameData.UnittypeTerrains.shape[2]
         ), dtype=np.int8)
     #rule = unittypeTerrains
@@ -79,7 +153,7 @@ def flattenUnitTerrainAltitudes(GameData: GameData):
 
     out = np.zeros((
         len(GameData.Units)
-        , len(GameData.Terrains)
+        , len(GameData.Terrains_Name)
         , len(GameData.Altitudes)
         , GameData.UnittypeTerrains.shape[2] #atk, def, allowed, cost
         ), dtype=np.int8) 
@@ -143,8 +217,8 @@ def flattenCombat(GameData: GameData):
     out = np.zeros((
         len(GameData.Units)
         , len(GameData.Units)
-        , len(GameData.Terrains)
-        , len(GameData.Terrains)
+        , len(GameData.Terrains_Name)
+        , len(GameData.Terrains_Name)
         , len(GameData.Altitudes)
         , len(GameData.Altitudes)
         , gc.MAXDISTANCE+1 #+1 bc includes 0
@@ -158,8 +232,8 @@ def flattenCombat(GameData: GameData):
     #this is 32m combinations... hm...
     for au, aunit in enumerate(GameData.Units):
         for du, dunit in enumerate(GameData.Units):
-            for at in range(GameData.Terrains.shape[0]):
-                for dt in range(GameData.Terrains.shape[0]):
+            for at in range(GameData.Terrains_Name.shape[0]):
+                for dt in range(GameData.Terrains_Name.shape[0]):
                     for aa, aalt in enumerate(GameData.Altitudes):
                         for da, dalt in enumerate(GameData.Altitudes):
                             for d in range(out.shape[6]):

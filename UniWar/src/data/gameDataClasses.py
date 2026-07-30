@@ -1,3 +1,4 @@
+#dataclasses, as well as data structure of my input csv data (loader is generic)
 
 from dataclasses import dataclass, field
 import numpy as np
@@ -7,87 +8,54 @@ from enum import IntEnum
 import sys
 import os
 
-#region FLATTEN STRAT
+import src.data.generated_constants as gc
 
-#we will only pass the minimal information required to the neural net, and in the form of 1D arrays
-    #this is GameState.Units and GameState.MetadataCurrent
-#engine can (not required) to maintain some other info for it's own effeciency
-    #see engine for details
+#see flattening stuff in that file
 
-#POTENTIAL GAMEDATA FLATTENING for optimization of engine (not net)
-    #FLATTEN OPS
-        #DONE adding to unitTerrains from unittypeTerrains, making the latter obsolete
-        #flattened UnitUnittypeAltitudes by listing each unit from the unittype... meh
-        # use the default logic to add an actions [] list to each unit
-            #actions per unit is currently in Units but could be in abilities instead. Visa versa with some abilities
-            #do passives? probably yes
-        #more? primary load is AI, not engine, but nice to optimize engine too
-    #USE CASE LOOKUPS, separated
-        #ACT: ability list: unitAbilities flattened into a units field as an array
-            #needs to be modified if emp... otherwise fine?
-        #MOV: 
-        #   mobility: unitAltitudes
-        #   movement allowed: terrainAltitudes
-        #   cost: unittypeTerrains flattened added into unitTerrains
-        #   ?? does vision matter?
-        #ATK: 
-        #   atk range: unitAltitudes
-        #   atk base: unitUnittypeAltitude, maybe flattened into unitUnit(defender)Altitude
-        #   terrain bonus (both): unittypeTerrains flattened added into unitTerrains
-        #   altitude bonus: Altitudes (for submerged)
-        #   defense base: unitAltitudes
-    #USE CASE VERY FLAT
-        #ACT: ability list: unitAbilities flattened into a units field as an array
-            #shape: U, A, 3 (exists, cooldown, strength)
-        #MOV:
-            #one-time retrievals
-                #unit number, unit type
-                #altitude
-                #mobility: unitAltitudes
-            #****ZOC: (does unit exist here), hexUnits
-            #****movement cost: (one table) combination of unittypeTerrains>unitTerrains (cost), terrainAltitudes (allowed)
-                #unit 
-                #***terrain - this requires lookup on map, but map static hopefully helps
-                #altitude (doesn't exist or cost = 100 or something = not allowed)
-        #ATK
-            #one-time retrievals
-                #unit type
-                #unit number
-                #altitude (atk penalty submerged)
-                #rangemin and max (from unitAltitudes)
-            #frequent lookup (one table - gets a p-value)
-                #attacker unit number
-                #***defending unit type (or unit)
-                #***defending altitude
-                #attacking unit terrain
-                #***defending unit terrain
 
-    #Remaining tables:
-        #Units (repair rate, actions/turn) 
-        #UnitAbilities (hm... may want this separate because cooldown and strength are separate)
-            #Abilities (some of it should be hardcoded, the rest (defaults) flattened into Units)
-        #Altitudes (for submerged penalty)
-        #TerrainAltitudes (movement allowed)
-        #UnitAltitudes (mobility, defense base, atk range)
-        #UnitTerrains (atk/def bonus, mobility cost)
-            #UnittypeTerrains
-        #UnitUnitAltitudes (not a base table, used for atk base)
-            #UnitUnittypeAltitudes
-        
-        #UNUSED
-            #Maptags (names only / hardcoded)
-            #Races (names only)
-            #Terrains (names only)
-            #UnitTypes (names only)
-#endregion flatten strat
+#region Loc, Action, GUB, player, other subcomponents... mathy stuff, idk
 
+@dataclass(frozen=True)
+class clsLoc:
+    X:                      np.uint8 #not allowing negatives because this are indices of the map numpy array
+    Y:                      np.uint8 
+    Altitude:               np.uint8
+
+@dataclass #(frozen=True) we build these sequntially, too much work
+class clsAction:
+    UnitIndex:              np.uint8
+    AbilityNumber:          np.uint8
+    BeforeAttackLoc:        clsLoc
+    DefenderUnitIndex:      np.uint8
+    AfterAttackLoc:         clsLoc
+
+# class ActionLike(Protocol): #this was supposed to help with autocomplete but doesn't
+#     UnitIndex:              np.uint8
+#     AbilityNumber:          np.uint8
+#     BeforeAttackHex:        clsLoc
+#     AfterAttackHex:         np.uint8
+#     AfterAttackHex:         clsLoc
+
+@dataclass
+class clsGUB:
+    DefenderIndex:          np.uint8            = field(default=None)
+    AttackerLoc:            clsLoc              = field(default=None)
+
+#clsPlayer used in frozen gamestate metadata
+@dataclass
+class clsPlayer:
+    Race:                   np.int8             = field(default=None)
+    InitialCredits:         np.int8             = field(default=0)
+    Team:                   np.int8             = field(default=None)
+
+#endregion
 
 #region gameState frozen
 @dataclass(frozen=True) #once created, cannot be changed, but is now hashable
 #we don't need to make the metadata portion super small and fast, since it won't be copied. But doing so anyway for the moment
 class GameMetadataInitial:
     MapName:        np.str_
-    PlayersInitial: np.ndarray #should be filled with identical dicts with race:, and maybe credits:
+    PlayersInitial: list[clsPlayer]             = field(default_factory=list) #for some reason it doesn't like NDArray[object] should be filled with identical dicts with race, team, maybe credits
     MapDescription: np.str_                     = field(default=None)
     Username:       np.str_                     = field(default=None)
     StartingCredits: np.uint16                  = field(default=0)
@@ -96,7 +64,7 @@ class GameMetadataInitial:
     Hashtags:       Optional[NDArray[np.str_]]  = field(default_factory=np.ndarray)
 
     def __post_init__(self):
-        # assert self.playersInitial.ndim == 1, how do we check this is filled with dicts or whatever it is?
+        # assert self.playersInitial.ndim == 1 #how do we check this is filled with dicts or whatever it is?
         pass
 
 #Could do map without dataclass but it might help if it's frozen (does it?)
@@ -120,6 +88,9 @@ class GameMetadataCurrent:
     PlayersCredits:     NDArray[np.uint16]          = field(metadata={"dtype": np.uint16})
     CurrentPlayer:      np.uint8                    = field(default=0, metadata={"dtype": np.uint8}) #starts at 0
     WinnerPlayer:       np.uint8                    = field(default=None, metadata={"dtype": np.uint8})
+    RandomState:        dict                        = field(default_factory=dict) #np.random.default_rng().bit_generator.state
+    GangUpBonus:        clsGUB                      = field(default=None) #defender index, attacked from loc
+
     def __post_init__(self):
         assert self.PlayersCredits.ndim == 1, "Players credits should be 1 dim array"
 
@@ -156,7 +127,6 @@ class GameState:
         
     MetadataCurrent:    GameMetadataCurrent
     Units:              GameUnits                   = field()
-        #duplicate data under here unitTiles and tilesUnit (or something)
     
 #endregion non-frozen
 
@@ -302,22 +272,54 @@ class DataUnitUnittypeAltitudes:
 #region np game data indexed
 
 gamedata_raw_structure = [
-    {"name": "Abilities", "dtype": np.bool_, "solo_cols":["Number"], "packed_cols": ["RecordExists", "RequiresAction", "Default", "AllowMovement"]}
-    , {"name": "Altitudes", "dtype": np.int8, "solo_cols":["Number"], "packed_cols": ["AttackBonus"]}
-    , {"name": "Maptags", "dtype": np.str_, "solo_cols":["Number"], "packed_cols":["Name"]} #we have name just so there is some data in here
-    , {"name": "Races", "dtype": np.str_, "solo_cols":["Number"], "packed_cols":["Name"]} #we have name just so there is some data in here
-    , {"name": "TerrainAltitudes", "dtype": np.bool_, "solo_cols":["TerrainNumber", "AltitudeNumber"], "packed_cols": ["Allowed"]}
-    , {"name": "Terrains", "dtype": np.str_, "solo_cols":["Number"], "packed_cols":["Name"]} #we have name just so there is some data in here
-    , {"name": "UnitAbilities", "dtype": np.uint8, "solo_cols":["UnitNumber", "AbilityNumber"], "packed_cols": ["RecordExists", "Cooldown", "AbilityStrength"]}
-    , {"name": "UnitAltitudes", "dtype": np.int8, "solo_cols":["UnitNumber", "AltitudeNumber"], "packed_cols": ["Mobility", "Vision", "AttackRangeMin", "AttackRangeMax", "Defense"]}
-    , {"name": "Units", "dtype": np.uint8, "solo_cols":["Number"], "packed_cols": ["RaceNumber", "Cost", "UnittypeNumber", "Repair", "ActionsPerTurn"]}
-    , {"name": "UnitTerrains", "dtype": np.int8, "solo_cols":["UnitNumber", "TerrainNumber"], "packed_cols":[ "AttackBonus", "DefenseBonus", "MovementAllowed", "MobilityCost"]}
-    , {"name": "Unittypes", "dtype": np.str_, "solo_cols":["Number"], "packed_cols":["Name"]} #we have name just so there is some data in here
-    , {"name": "UnittypeTerrains", "dtype": np.int8, "solo_cols":["UnittypeNumber", "TerrainNumber"], "packed_cols":["AttackBonus", "DefenseBonus", "MovementAllowed", "MobilityCost"]}
-    , {"name": "UnitUnittypeAltitudes", "dtype": np.float16, "solo_cols":["UnitNumber", "DefenderUnittypeNumber", "DefenderAltitudeNumber"], "packed_cols":["Strength", "Armorpiercing"]}
+    {"csv": "Abilities", "dtype": np.bool_, "solo_cols":["Number"], "packed_cols": ["RecordExists", "RequiresAction", "Default", "AllowMovement"]}
+    , {"csv": "Abilities", "field": "Abilities_Name", "dtype": object, "solo_cols":["Number"], "packed_cols": ["Name", "Notes"]}
+    , {"csv": "Altitudes", "dtype": np.int8, "solo_cols":["Number"], "packed_cols": ["AttackBonus"]}
+    , {"csv": "Altitudes", "field": "Altitudes_Name", "dtype": object, "solo_cols":["Number"], "packed_cols": ["Name", "Notes"]}
+    , {"csv": "Maptags", "field": "Maptags_Name", "dtype": object, "solo_cols":["Number"], "packed_cols":["Name", "Notes"]}
+    , {"csv": "Races", "field": "Races_Name", "dtype": object, "solo_cols":["Number"], "packed_cols":["Name", "Notes"]}
+    , {"csv": "TerrainAltitudes", "dtype": np.bool_, "solo_cols":["TerrainNumber", "AltitudeNumber"], "packed_cols": ["Allowed"]}
+    , {"csv": "Terrains", "field": "Terrains_Name", "dtype": object, "solo_cols":["Number"], "packed_cols":["Name", "Notes"]}
+    , {"csv": "UnitAbilities", "dtype": np.uint8, "solo_cols":["UnitNumber", "AbilityNumber"], "packed_cols": ["RecordExists", "Cooldown", "AbilityStrength"]}
+    , {"csv": "UnitAltitudes", "dtype": np.int8, "solo_cols":["UnitNumber", "AltitudeNumber"], "packed_cols": ["Mobility", "Vision", "AttackRangeMin", "AttackRangeMax", "Defense"]}
+    , {"csv": "Units", "dtype": np.uint8, "solo_cols":["Number"], "packed_cols": ["RaceNumber", "Cost", "UnittypeNumber", "RepairRate", "ActionsPerTurn"]}
+    , {"csv": "Units", "field": "Units_Name", "dtype": object, "solo_cols":["Number"], "packed_cols":["Name", "Notes", "Abbreviation"]} #include RaceName or do that with flattening or..?
+    , {"csv": "UnitTerrains", "dtype": np.int8, "solo_cols":["UnitNumber", "TerrainNumber"], "packed_cols":[ "AttackBonus", "DefenseBonus", "MovementAllowed", "MobilityCost"]}
+    , {"csv": "Unittypes", "field": "Unittypes_Name", "dtype": object, "solo_cols":["Number"], "packed_cols":["Name", "Notes"]}
+    , {"csv": "UnittypeTerrains", "dtype": np.int8, "solo_cols":["UnittypeNumber", "TerrainNumber"], "packed_cols":["AttackBonus", "DefenseBonus", "MovementAllowed", "MobilityCost"]}
+    , {"csv": "UnitUnittypeAltitudes", "dtype": np.float16, "solo_cols":["UnitNumber", "DefenderUnittypeNumber", "DefenderAltitudeNumber"], "packed_cols":["Strength", "Armorpiercing"]}
 ]
 
-def write_constants_file():
+@dataclass(frozen=True)
+class GameData:
+    Abilities:              NDArray[np.bool_]                   =field(default_factory=np.ndarray, metadata={"dtype": np.bool_})
+    Abilities_Name:         NDArray                             =field(default_factory=np.ndarray, metadata={"dtype": object})
+    Altitudes:              NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
+    Altitudes_Name:         NDArray                             =field(default_factory=np.ndarray, metadata={"dtype": object})
+    Maptags_Name:           NDArray                             =field(default_factory=np.ndarray, metadata={"dtype": object})
+    Races_Name:             NDArray                             =field(default_factory=np.ndarray, metadata={"dtype": object})
+    TerrainAltitudes:       NDArray[np.bool_]                   =field(default_factory=np.ndarray, metadata={"dtype": np.bool_})
+    Terrains_Name:          NDArray                             =field(default_factory=np.ndarray, metadata={"dtype": object})
+    UnitAbilities:          NDArray[np.uint8]                   =field(default_factory=np.ndarray, metadata={"dtype": np.uint8})
+    UnitAltitudes:          NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
+    Units:                  NDArray[np.uint8]                   =field(default_factory=np.ndarray, metadata={"dtype": np.uint8})
+    Units_Name:             NDArray                             =field(default_factory=np.ndarray, metadata={"dtype": object})
+    UnitTerrains:           NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
+    Unittypes_Name:         NDArray                             =field(default_factory=np.ndarray, metadata={"dtype": object})
+    UnittypeTerrains:       NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
+    UnitUnittypeAltitudes:  NDArray[np.float16]                 =field(default_factory=np.ndarray, metadata={"dtype": np.float16})
+
+    #Flattened stuff
+    #UnitAbilities and UnitTerrains just modified
+    UnitTerrainAltitudes:   Optional[np.int8]                   =field(default=None, metadata={"dtype": np.int8})
+    # Combat:                 Optional[np.float16]                =field(default=None, metadata={"dtype": np.float16}) 
+
+#endregion
+
+
+
+#maybe bundle this with other utils instead
+def write_constants_file(GameData: GameData):
     """
     Generate a Python file containing hardcoded constants for all packed columns
     so the IDE can autocomplete them.
@@ -331,7 +333,7 @@ def write_constants_file():
     lines.append("# Generated by gameDataClasses.write_constants_file()\n\n")
 
     #MANUAL
-    constant_dict = {"X": 0, "Y": 1, "ALT": 2, "MAXDISTANCE": 5, "AP": 0, "DP": 0} #from manual
+    constant_dict = {"MAXDISTANCE": 5, "X": 0, "Y": 1, "ALT": 2, "DEFAULTALTITUDE": 1} #from manual
 
     lines.append(f"# Constants (manual) assorted \n")
     lines.append(f"MAXDISTANCE = 5\n") #max distance of ranged attack (walker). Could actually get this from GameData... ugh. Contants not needed for loader.
@@ -341,15 +343,17 @@ def write_constants_file():
     lines.append(f"X = 0\n")
     lines.append(f"Y = 1\n")
     lines.append(f"ALT = 2\n")
+    lines.append(f"DEFAULTALTITUDE = 1")
     lines.append("\n")
 
-    lines.append(f"# Constants (manual) for new table from flattening COMBAT \n")
-    lines.append(f"AP = 0\n")
-    lines.append(f"DP = 1\n")
-    lines.append("\n")
+    # lines.append(f"# Constants (manual) for new table from flattening COMBAT \n")
+    # lines.append(f"AP = 0\n")
+    # lines.append(f"DP = 1\n")
+    # lines.append("\n")
 
     #AUTOMATIC
-    # Iterate through your raw structure
+    lines.append(f"# Constants for each source table\n")
+    # Iterate through raw structure
     for d in gamedata_raw_structure:
         
         # Optional: write a section header
@@ -361,60 +365,28 @@ def write_constants_file():
             const_name = packed_col.strip().upper().replace(" ", "_")
             if const_name in constant_dict:
                 if constant_dict[const_name] != i: raise RuntimeError(f"{const_name} is duplicate with conflicting values")
+            else:
+                constant_dict[const_name] = i
             lines.append(f"{const_name} = {i}\n")
 
         lines.append("\n") #space before next section
+
+    #ABILITY NUMBERS
+    if os.path.exists(output_path): #only run if gc.Name already exists in file
+        lines.append(f"# Constants for Ability numbers \n")
+        for i, ability in enumerate(GameData.Abilities_Name):
+            if i == 0: continue #we don't have a 0-indexed ability, we start at 1 because we're weird
+            const_name: str = str(ability[gc.NAME])
+            const_name = "".join(const_name.split()) #removes spaces, tabs, and newlines
+            const_name = const_name.upper()
+            if const_name in constant_dict:
+                if constant_dict[const_name] != i: raise RuntimeError(f"{const_name} is duplicate with conflicting values")
+            else:
+                constant_dict[const_name] = i
+            lines.append(f"{const_name} = {i}\n")
 
     # Write / overwrite the file
     with open(output_path, "w", encoding="utf-8") as f:
         f.writelines(lines)
 
     # print(f"Generated constants file at: {os.path.abspath(output_path)}")
-write_constants_file()
-
-@dataclass(frozen=True)
-class GameData:
-    Abilities:              NDArray[np.bool_]                   =field(default_factory=np.ndarray, metadata={"dtype": np.bool_})
-    Altitudes:              NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
-    Maptags:                NDArray[np.str_]                    =field(default_factory=np.ndarray, metadata={"dtype": np.str_})
-    Races:                  NDArray[np.str_]                    =field(default_factory=np.ndarray, metadata={"dtype": np.str_})
-    TerrainAltitudes:       NDArray[np.bool_]                   =field(default_factory=np.ndarray, metadata={"dtype": np.bool_})
-    Terrains:               NDArray[np.str_]                    =field(default_factory=np.ndarray, metadata={"dtype": np.str_})
-    UnitAbilities:          NDArray[np.uint8]                   =field(default_factory=np.ndarray, metadata={"dtype": np.uint8})
-    UnitAltitudes:          NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
-    Units:                  NDArray[np.uint8]                   =field(default_factory=np.ndarray, metadata={"dtype": np.uint8})
-    UnitTerrains:           NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
-    Unittypes:              NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
-    UnittypeTerrains:       NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
-    UnitUnittypeAltitudes:  NDArray[np.float16]                 =field(default_factory=np.ndarray, metadata={"dtype": np.float16})
-
-    #Flattened stuff
-    #UnitAbilities and UnitTerrains just modified
-    UnitTerrainAltitudes:   Optional[np.int8]                   =field(default=None, metadata={"dtype": np.int8})
-    Combat:                 Optional[np.float16]                =field(default=None, metadata={"dtype": np.float16}) 
-#endregion
-
-#region Hex and Action, subcomponents... mathy stuff, idk
-
-@dataclass(frozen=True)
-class clsHex:
-    x:                      np.uint8 #not allowing negatives because this are indices of the map numpy array
-    y:                      np.uint8 
-    altitude:               np.uint8
-
-@dataclass(frozen=True)
-class clsAction:
-    UnitIndex:              np.uint8
-    AbilityNumber:          np.uint8
-    BeforeAttackHex:        clsHex
-    DefenderUnitIndex:      np.uint8
-    AfterAttackHex:         clsHex
-
-# class ActionLike(Protocol): #this was supposed to help with autocomplete but doesn't
-#     UnitIndex:              np.uint8
-#     AbilityNumber:          np.uint8
-#     BeforeAttackHex:        clsHex
-#     AfterAttackHex:         np.uint8
-#     AfterAttackHex:         clsHex
-
-#endregion

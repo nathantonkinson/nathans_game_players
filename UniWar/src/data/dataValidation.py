@@ -8,6 +8,10 @@
     #check that the ids that exist in the cross reference tables exist in the main tables (e.g. unitStates unitNumber exists in units)
     #primary key duplication in main and cross reference tables
 
+    #VISUALS
+    #visuazlier terrain list is same length (and maybe same names??) as csv.
+    #text fields (like notes) are 128 characters or less (u128 in loader). OR use normal python strings.
+
     #MODs
     #not doing this yet
 
