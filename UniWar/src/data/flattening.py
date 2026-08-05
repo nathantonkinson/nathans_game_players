@@ -12,7 +12,7 @@ import numpy as np
 import math
 
 import src.data.generated_constants as gc
-from src.data.gameDataClasses import GameData, GameState, clsAction, clsLoc
+from src.data.gameDataClasses import clsGameData, clsGameState, clsAction, clsLoc
 
 
 #region FLATTEN STRAT (kindof old)
@@ -90,7 +90,7 @@ from src.data.gameDataClasses import GameData, GameState, clsAction, clsLoc
 #endregion flatten strat
 
 
-def flattenUnitAbilities(GameData: GameData):
+def flattenUnitAbilities(GameData: clsGameData):
     # GameData.UnitAbilities #specifics
     # GameData.Abilities #defaults
     out = np.zeros((
@@ -120,7 +120,7 @@ def flattenUnitAbilities(GameData: GameData):
     #can do replace but can't modify in-place so pass out
     return dc.replace(GameData, UnitAbilities = out)
 
-def flattenUnitTerrains(GameData: GameData):
+def flattenUnitTerrains(GameData: clsGameData):
     #flatten unittypeTerrains into unitTerrains, all because of the silly Battery exception lol
 
     out = np.zeros((
@@ -148,7 +148,7 @@ def flattenUnitTerrains(GameData: GameData):
     # print(out[21])
     return dc.replace(GameData, UnitTerrains = out)
 
-def flattenUnitTerrainAltitudes(GameData: GameData):
+def flattenUnitTerrainAltitudes(GameData: clsGameData):
     #similar code to UnitTerrains and not dependent on that one running
 
     out = np.zeros((
@@ -180,7 +180,7 @@ def flattenUnitTerrainAltitudes(GameData: GameData):
 
     return dc.replace(GameData, UnitTerrainAltitudes = out)
 
-def flattenCombat(GameData: GameData):
+def flattenCombat(GameData: clsGameData):
     #ABANDONED because 32m is slower than 22 individual lookups
 
     #make np array such that you input attacker and defender stats and get two ps
@@ -305,7 +305,7 @@ def flattenCombat(GameData: GameData):
     print() #exit newline shennanigans of progress bar
     return dc.replace(GameData, Combat = out)
 
-def allFlattening(GameData: GameData):
+def allFlattening(GameData: clsGameData):
     #does all the flattening in one bundle
 
     GameData = flattenUnitAbilities(GameData)

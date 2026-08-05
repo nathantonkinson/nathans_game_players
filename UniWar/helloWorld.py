@@ -9,34 +9,65 @@ import cProfile # cProfile.run("helloWorld()", sort="tottime")
 from src.data.loader import Loader #this file has file tree navigation stuff btw
 # import src.gameDataClasses as dc
 import src.data.generated_constants as gc
-from src.data.gameDataClasses import GameData, GameState, clsAction, clsLoc, write_constants_file
+from src.data.gameDataClasses import clsGameData, clsGameState, clsAction, clsLoc, write_constants_file
 import src.data.flattening as f
 from src.engine.engine import Engine
 from src.visualizer.visualizer import Visualizer #lol folder, filename, and class are all the same
-# import src.visualizer.visualizer_test
+from src.data.stateCleanse import stateCleanse
+from players.playerRandom import clsPlayerRandom
+from players.playerFirstchoice import clsPlayerFirstchoice #maybe need to do something special so we have access to all of these, or can do more like a list
+from src.engine.gameManager import clsGameManager
 
-# if __name__ == "__main__": print("I'm main") #in other files prints something like src.data.gameDataClasses
 
-myLoader = Loader()
-myGameData: GameData = myLoader.load_GameData()
-myGameData = f.allFlattening(myGameData)
-write_constants_file(myGameData) #don't need to run this every time, could put it in a utility packet
-myGameState: GameState = myLoader.load_map("plainsLine.yaml")
-myEngine: Engine = Engine(myGameState, myGameData)
 
-myEngine.getAvailableActions()
-print(myEngine.availableActions)
+#region run manually
+# #RUN MANUALLY
+# myLoader = Loader()
+# myGameData: clsGameData = myLoader.load_GameData()
+# write_constants_file(myGameData)
+# myGameData = f.allFlattening(myGameData)
+# myGameState: clsGameState = myLoader.load_map("plainsLine")
+# myGameState = stateCleanse(myGameState, myGameData) #must call outside of loader due to GameData
+# myEngine: Engine = Engine(myGameState, myGameData)
+
+# print(myEngine.getDist(0, 0, 0, 1))
+# print(myEngine.getDist(0, 2, 0, 3))
+
+# myEngine.applyAction(clsAction(0, 24, (0, 2, 1), 255, (0, 2, 1)))
+# myEngine.applyAction(clsAction(255, 26, (0, 0, 1), 255, (0, 0, 1)))
+# myEngine.applyAction(clsAction(255, 26, (0, 0, 1), 255, (0, 0, 1)))
+# print(myEngine.availableActions)
+# myEngine.applyAction(clsAction(0, 1, (0, 2, 1), 1, (0, 2, 1)))
+# print(myEngine.GameState.MetadataCurrent.WinnerTeam)
+#endregion run manually
+
+
+
+
+
+# Player1 = clsPlayerFirstchoice()
+# Player2 = clsPlayerFirstchoice()
+Player1 = clsPlayerRandom()
+Player2 = clsPlayerRandom()
+myGameManager = clsGameManager("plainsLine", playerListInstance=[Player1, Player2])
+write_constants_file(myGameManager.Engine.GameData) #don't need to run this every time, could put it in a utility packet
+myGameManager.play(gameCount=100)
+
+
+
+
+#ok now let's do:
+#logging
+#something to see all possible combos of moves/actions on a turn, maybe then plug into visualizer
+#a very basic static heuristic (credits)
+#more complicated maps and units (not doing any specials yet - no plague, no underlings or subs, no bases, no conversions)
+#add healing
+#see if we can get a CPU of any kind of solve tank vs plasma or something similar, or even the 10 vs 1 for that matter.
+#exeption handling
 
 # myViz = Visualizer(myGameData, myGameState, myEngine) #we should actually only need to pass the engine, right?
 # myViz.run()
 
-# #DO THE ATTACK MANUALLY
-# print(myGameState.Units.UnitHexes)
-# print(myGameState.Units.UnitHps)
-# myAction = clsAction(0, 1, clsLoc(0, 2, 1), 1, clsLoc(0, 2, 1))
-# myEngine.applyAction(myAction)
-# print(myGameState.Units.UnitHexes)
-# print(myGameState.Units.UnitHps)
 
 #don't forget data validation
 #and map cleansing, maybe
@@ -48,5 +79,13 @@ print(myEngine.availableActions)
 #might be a good exercise to run every unit on every terrain vs every unit on every terrain
     #technically for generating all possible p values, but also just good exercise
 
+# if __name__ == "__main__": print("I'm main") #in other files prints something like src.data.gameDataClasses
 
+#Structure seems a little too deep
+#GameManager
+    #Engine
+        #GameData
+        #GameState
+#we could make the engine reference the GameManager
+#but I do like the ability to use Engine all on it's own.
 

@@ -39,7 +39,7 @@ class clsAction:
 @dataclass
 class clsGUB:
     DefenderIndex:          np.uint8            = field(default=None)
-    AttackerLoc:            clsLoc              = field(default=None)
+    AttackerLoc:            tuple               = field(default=None)
 
 #clsPlayer used in frozen gamestate metadata
 @dataclass
@@ -47,10 +47,13 @@ class clsPlayer:
     Race:                   np.int8             = field(default=None)
     InitialCredits:         np.int8             = field(default=0)
     Team:                   np.int8             = field(default=None)
+    AllowedRaces:           set[int]            = field(default_factory=set) #allows any race.
 
 #endregion
 
-#region gameState frozen
+#region gameState
+
+#frozen stuff
 @dataclass(frozen=True) #once created, cannot be changed, but is now hashable
 #we don't need to make the metadata portion super small and fast, since it won't be copied. But doing so anyway for the moment
 class GameMetadataInitial:
@@ -62,6 +65,8 @@ class GameMetadataInitial:
     BaseCredits:    np.uint16                   = field(default=100)
     CityCredits:    np.uint16                   = field(default=50)
     Hashtags:       Optional[NDArray[np.str_]]  = field(default_factory=np.ndarray)
+    WinCon:         np.int8                     = field(default=3) #capture/cover enemy bases and kill all their units.
+    AllowedRaces:   set[int]                    = field(default_factory=set) #allows any race.
 
     def __post_init__(self):
         # assert self.playersInitial.ndim == 1 #how do we check this is filled with dicts or whatever it is?
@@ -75,31 +80,33 @@ class GameMap:
         #would this be faster?
     #units are adjacent to: (-1, 1), (0, 1), (-1, 0), (1, 0), (0, -1), (1, -1)
         #y axis is slanted right into +x+y on normal graph
+    BasePlayers:        NDArray[np.int8]           = field(default=None, metadata={"dtype": np.int8}) #2 dim (x, y) = player index
 
     
     def __post_init__(self):
         assert self.Map.ndim == 2, "Map should be 2 dimensional (x, y)" #state is for units, terrain types have states built in
 
-#endregion
-
-#region gameState non-frozen
+#non frozen stuff
 @dataclass
 class GameMetadataCurrent:
     PlayersCredits:     NDArray[np.uint16]          = field(metadata={"dtype": np.uint16})
     CurrentPlayer:      np.uint8                    = field(default=0, metadata={"dtype": np.uint8}) #starts at 0
-    WinnerPlayer:       np.uint8                    = field(default=None, metadata={"dtype": np.uint8})
+    WinnerTeam:         np.uint8                    = field(default=None, metadata={"dtype": np.uint8})
     RandomState:        dict                        = field(default_factory=dict) #np.random.default_rng().bit_generator.state
     GangUpBonus:        clsGUB                      = field(default=None) #defender index, attacked from loc
+    Round:              np.uint8                    = field(default=1) #defender index, attacked from loc
 
     def __post_init__(self):
         assert self.PlayersCredits.ndim == 1, "Players credits should be 1 dim array"
 
 @dataclass
 class GameUnits:
-    UnitPlayers:    NDArray[np.int8]               = field(metadata={"dtype": np.uint8})
+    #all of these are 1d np arrays of length of the number of units possible. We will reshape on engine load
+    UnitPlayers:    NDArray[np.int8]                = field(metadata={"dtype": np.uint8})
     UnitNumbers:    NDArray[np.uint8]               = field(metadata={"dtype": np.uint8}) #capping out at 256 unit types lol
     UnitHps:        NDArray[np.uint8]               = field(metadata={"dtype": np.uint8})
-    UnitHexes:      Optional[NDArray[np.uint8]]     = field(default=None, metadata={"dtype": np.uint8}) #shape (U index, 3 (H, W, S))
+    UnitHexes:      NDArray[np.uint8]               = field(metadata={"dtype": np.uint8}) #shape (U index, 3 (H, W, S))
+    UnitActions:    Optional[NDArray[np.uint8]]     = field(metadata={"dtype": np.uint8})
     #UnitExp
     #some kind of special properties, like cooldowns, plague, emp
     
@@ -120,7 +127,7 @@ class GameUnits:
         #     assert self.HexUnits.shape[2] == 3, "tileUnits 3rd dim must be size 3 state (surface air, underwater, underground)"
 
 @dataclass
-class GameState:
+class clsGameState:
     # def __init__(self): #I think this will be more costly, and/or isn't actually using the dataclass features
     MetadataInitial:    GameMetadataInitial         = field()
     Map:                GameMap
@@ -128,7 +135,23 @@ class GameState:
     MetadataCurrent:    GameMetadataCurrent
     Units:              GameUnits                   = field()
     
-#endregion non-frozen
+#endregion gamestate
+
+@dataclass
+class clsReplayCheckpoint:
+    GameState:          clsGameState                   = field()
+
+
+@dataclass
+class clsReplay:
+    Map:                clsGameState                = field()
+    Actions:            list[clsAction]
+    MapFilename:        str                         = field(default=None)
+    Checkpoints:        list[object]                = field(default=None)
+
+
+
+
 
 #region old game data (list of dataclasses)
 #region dataclass for each table
@@ -252,7 +275,7 @@ class DataUnitUnittypeAltitudes:
 #endregion game data individual tables
 
 # @dataclass(frozen=True)
-# class GameData:
+# class clsGameData:
 #     Abilities:              List[DataAbilities]                 =field(default_factory=list)
 #     Altitudes:              List[DataAltitudes]                 =field(default_factory=list)
 #     Maptags:                List[DataMaptags]                   =field(default_factory=list)
@@ -269,7 +292,7 @@ class DataUnitUnittypeAltitudes:
 
 #endregion old game data class (list of dataclasses)
 
-#region np game data indexed
+#region gamedata (np game data indexed)
 
 gamedata_raw_structure = [
     {"csv": "Abilities", "dtype": np.bool_, "solo_cols":["Number"], "packed_cols": ["RecordExists", "RequiresAction", "Default", "AllowMovement"]}
@@ -281,8 +304,8 @@ gamedata_raw_structure = [
     , {"csv": "TerrainAltitudes", "dtype": np.bool_, "solo_cols":["TerrainNumber", "AltitudeNumber"], "packed_cols": ["Allowed"]}
     , {"csv": "Terrains", "field": "Terrains_Name", "dtype": object, "solo_cols":["Number"], "packed_cols":["Name", "Notes"]}
     , {"csv": "UnitAbilities", "dtype": np.uint8, "solo_cols":["UnitNumber", "AbilityNumber"], "packed_cols": ["RecordExists", "Cooldown", "AbilityStrength"]}
-    , {"csv": "UnitAltitudes", "dtype": np.int8, "solo_cols":["UnitNumber", "AltitudeNumber"], "packed_cols": ["Mobility", "Vision", "AttackRangeMin", "AttackRangeMax", "Defense"]}
-    , {"csv": "Units", "dtype": np.uint8, "solo_cols":["Number"], "packed_cols": ["RaceNumber", "Cost", "UnittypeNumber", "RepairRate", "ActionsPerTurn"]}
+    , {"csv": "UnitAltitudes", "dtype": np.int8, "solo_cols":["UnitNumber", "AltitudeNumber"], "packed_cols": ["RecordExists", "Mobility", "Vision", "AttackRangeMin", "AttackRangeMax", "Defense"]}
+    , {"csv": "Units", "dtype": np.uint8, "solo_cols":["Number"], "packed_cols": ["RaceNumber", "Cost", "UnittypeNumber", "UnitroleNumber", "RepairRate", "ActionsPerTurn"]}
     , {"csv": "Units", "field": "Units_Name", "dtype": object, "solo_cols":["Number"], "packed_cols":["Name", "Notes", "Abbreviation"]} #include RaceName or do that with flattening or..?
     , {"csv": "UnitTerrains", "dtype": np.int8, "solo_cols":["UnitNumber", "TerrainNumber"], "packed_cols":[ "AttackBonus", "DefenseBonus", "MovementAllowed", "MobilityCost"]}
     , {"csv": "Unittypes", "field": "Unittypes_Name", "dtype": object, "solo_cols":["Number"], "packed_cols":["Name", "Notes"]}
@@ -291,7 +314,7 @@ gamedata_raw_structure = [
 ]
 
 @dataclass(frozen=True)
-class GameData:
+class clsGameData:
     Abilities:              NDArray[np.bool_]                   =field(default_factory=np.ndarray, metadata={"dtype": np.bool_})
     Abilities_Name:         NDArray                             =field(default_factory=np.ndarray, metadata={"dtype": object})
     Altitudes:              NDArray[np.int8]                    =field(default_factory=np.ndarray, metadata={"dtype": np.int8})
@@ -319,7 +342,7 @@ class GameData:
 
 
 #maybe bundle this with other utils instead
-def write_constants_file(GameData: GameData):
+def write_constants_file(GameData: clsGameData):
     """
     Generate a Python file containing hardcoded constants for all packed columns
     so the IDE can autocomplete them.

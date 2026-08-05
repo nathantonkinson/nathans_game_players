@@ -24,4 +24,5 @@ AttackSurfaceAirFromUnderwater	22	1	0	1		sub can | kraken and skimmer cannot
 Teleport	23	1	1	0	0	Disabled for 1 turn after (so on same turn as TP could notate as 2 turn disable) then cooldown (mecha 2 | eclipse 3 | guardian 2);
 Move	24	1	1	1	1	Movement without attacking or anything
 ResurfaceNoattack	25	1	1	0	0	
-PassTurn	26	1	0	1		
+PassTurn	26	1	0	0		We will make this an available action with unit index -1 or something... maybe?
+Surrender	27	1	0	0		We will make this an available action with unit index -1 or something... maybe?

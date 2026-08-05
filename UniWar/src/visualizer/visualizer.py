@@ -30,14 +30,13 @@ import os
 import math
 import tkinter as tk
 from tkinter import ttk, messagebox
-from dataclasses import replace
 
 # Make sure the UniWar package root is on the path, regardless of where
 # the script is launched from.
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 
-from src.data.gameDataClasses import GameData, GameState, clsAction, clsLoc
+from src.data.gameDataClasses import clsGameData, clsGameState, clsAction, clsLoc
 from src.engine.engine import Engine
 import src.data.generated_constants as gc
 
@@ -152,7 +151,7 @@ class Visualizer:
     engine    : Engine     – optional; needed for Pass Turn and action dispatch
     """
 
-    def __init__(self, gamedata: GameData, gamestate: GameState, engine: Engine = None):
+    def __init__(self, gamedata: clsGameData, gamestate: clsGameState, engine: Engine = None):
         self.gamedata  = gamedata
         self.gamestate = gamestate
         self.engine    = engine
@@ -708,7 +707,7 @@ class Visualizer:
 
     # ── Public API ─────────────────────────────────────────────────────
 
-    def update_state(self, new_gamestate: GameState): #if new gamestate object needs to be passed for some reason
+    def update_state(self, new_gamestate: clsGameState): #if new gamestate object needs to be passed for some reason
         self.gamestate = new_gamestate
         self._selected = None
         self._mode     = "idle"

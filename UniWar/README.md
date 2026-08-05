@@ -60,8 +60,24 @@ I don't own this game or anything. Don't use this codebase to try and rip them o
     - #BLIM5 - 5 is the round number during the game when the bases get depleted and do not produce crystals anymore. Cities, however, provide crystals during the whole game.
     - #RNGBUILD - fun game mode that makes all your empty bases to build random units for free. This way players do not have control on what to build.
     - #RNGBUILDANY - same as above, but player bases build random units of any race. Even more fun!
-    - #editstats - map has different unit stats
     - #TTL120 - total time limit across all turns
+    - #TEST - excludes the map from ranked. I think I'm going to automatically make all non-symmetrical maps unranked
+- My added map hashtags
+    - #editstats - some people use this, but it is not mechanically capture. map has different unit stats. Not implemented yet, would need a bunch of other metadata stuff
+    - #DETERMINISTICDAMAGE - use the average damage expected, round up/down
+    - #BASEP50 - change base damage prob from the default 0.5 to 0.XX. Useful if no healing and building and stuff to resolve 1hp vs 1hp
+    - #WIN1 - win condition number. These are 
+        - 1 = capture enemy bases (full capture or be sitting on top of them)
+        - 2 = destroy all enemy units
+        - 3 = 1+2
+        - 4 = capture the flag (first actual capture of anything wins)
+        - 5 = survive 10 rounds
+        - 6 = survive 20 rounds
+        - 7 = survive 30 rounds
+    - #ROUNDLIMIT10 - after X turns we determine a winner via credits (on field*hp + in hand, averaged over the turns of the last round)
+    - #BLITZACTION30 - 30 seconds to take each action. Primarily used for CPUs
+    - #NOREPAIR - units not allowed to take repair action, and do not repair by default if not moved, and medical hexes don't work
+    - #NONGENERICUNITS - NOT USING THIS, using generic unit numbers instead? by default units on maps without race assignment will be converted to the equivalent in the chosen race. 
 - Other hashtags (nonmechanical)
     - #help - idk what this does
     - #needtime - 
@@ -69,6 +85,12 @@ I don't own this game or anything. Don't use this codebase to try and rip them o
     - #nohurry - resents opponent timer
     - #brawl - enlist/unenlist from brawl games
 - known ways to exploit existing AIS
+- some of Nathan's decisions
+    - like the game, moving into ones own space is not allowed (except for move after attack)
+    - like the game, healing will happen if you do nothing with the unit (and repair is not disabled)
+    - there are generic units, such that when you make a map, you can designate units that convert to the equivalent race, and units that are fixed as whatever you set them to be.
+    - because 3v3 tournaments in UniWar sort-of allows you to pick race based on map, that is a function. But other modes may just force race or whatever
+    - It's not like I'll even do real mods, but a weird interplay between maps and gamedata. Maps have tags, I guess the tags would modify the data...
 
 # Stragegy/heuristics
 - https://tinyurl.com/TheArtOfUniwar
@@ -145,23 +167,24 @@ I don't own this game or anything. Don't use this codebase to try and rip them o
     - pass state to player, get move from player, pass that to engine, get state back
 - AI stuff
     - Players/decision functions - accept state and output an action
-        - Policy head is one option
+        - Policy head is one option (plain neural net)
+        - Could take more time and utilize search functions etc
     - Value/heuristic functions - put scores of some kind on gamestates
         - Fast (no calls to splitters)
             - Manual heuristic
-            - Neural net (value head(s))
+            - Neural net (value head(s) - win/loss, volatility, +?)
         - Slow - involve looking into the future
         - Win/loss prediction vs stability measure (Quiescence) vs other measures (??)
-    - Search/pruning functions - choose which actions to explore - slightly different purpose than players/decisions
+    - Search/pruning functions - choose which actions to explore - slightly different purpose (and thus different pruning) than players/decisions
         - MCTS weights
         - Minimax
         - "Move ordering" meaning try the best moves first - maybe not useful in mcts? But should be in minimax
         - We will need some very strong deduping (actual dups and maybe things that are close too)
-    - Trainers - kind of have to be specific to the heuristic or player
+    - Trainers - kind of have to be specific to the heuristic or player. Probably in the AI folder
         - Genetic to train nets
         - Some kind of genetic on the adjustable parameters of manual heuristic
         - Train on high skill histories
-        - Play vs self or others, whatever
+        - Play vs self or others, whatever, to generate games
     - Evaluator(s)
         - Play AIs against each other to develop an ELO, or play against a standard (like random) and rank/elo/score is win% or win speed or whatever
         - Map choices
@@ -189,6 +212,8 @@ I don't own this game or anything. Don't use this codebase to try and rip them o
 # Best practice stuff
 - all folders are packages with __init__.py in them, so that if I move files around inside the package, it still works.. I haven't tested this fully
 - run/test all code from top level main folder, other files import using folder structure... eh not sure how that works with packages.
+- struct of arrays rather than array of structs
+- I know I'm inconsistent with 0 indexing. Almost everying is 1 indexed with empty data in the 0 slot, but then players are 0-indexed.
 
 # Glossary
 - hex - denoted by x, y 
@@ -215,4 +240,9 @@ I don't own this game or anything. Don't use this codebase to try and rip them o
     - missing
     - empty
     - 255 or whatever is at upper limit of numeric type, often displays as -1
+- history - reference to map (or map directly) plus action history, maybe with checkpoints
+    - replay - synonym
+- unitrole - a unit role is the 1-11 type it is relative to it's race. e.g. Infantry role in sapien is Marine
+    - genericnumber - synonym
+    - role
 

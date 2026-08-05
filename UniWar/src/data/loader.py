@@ -8,10 +8,12 @@ from dataclasses import dataclass, is_dataclass, fields
 import numpy as np
 from typing import get_origin, get_args, Union
 from numpy.typing import NDArray
+import os
 
 #my project imports
 import src.data.gameDataClasses as dc
-from src.data.gameDataClasses import GameData, GameState
+from src.data.gameDataClasses import clsGameData, clsGameState
+from src.data.stateCleanse import stateCleanse
 
 
 #get root directory of uniwar
@@ -114,6 +116,8 @@ class Loader:
             if origin is Union:
                 # print("Origin is union")
                 return any(is_ndarray_type(arg) for arg in get_args(t))
+
+            return False
             
             # print("Not caught type")
 
@@ -173,10 +177,6 @@ class Loader:
                 inner = f.type.__args__[0]
                 kwargs[f.name] = [self.from_dict(inner, v) for v in value]
 
-            #optional field actually missing I think
-            elif value is None:
-                kwargs[f.name] = None
-            
             # NumPy array - so do array conversion. Fancy union stuff to catch optional type fields
             elif is_ndarray_type(f.type):
                 dtype = f.metadata.get("dtype", None)
@@ -185,19 +185,39 @@ class Loader:
             elif is_string_array_field(f.type):
                 kwargs[f.name] = np.array(value, dtype='U128') #128 chacters
 
+            # # Normal list or normal set (non-dataclass elements)
+            # elif getattr(f.type, "__origin__", None) in (list, set):
+            #     inner = f.type.__args__[0]
+
+            #     #we have already handled lists of dataclasses above, so these are primitive
+            #     if getattr(f.type, "__origin__", None) is list:
+            #         kwargs[f.name] = [self.from_dict(inner, v) for v in value]
+            #     else:  # it's a set
+            #         kwargs[f.name] = {self.from_dict(inner, v) for v in value}
+            #     continue
+
+            #optional field actually missing I think
+            elif value is None:
+                # kwargs[f.name] = None
+                continue #the default will handle this, don't add to kwargs
+            
             # Normal field
             else:
                 kwargs[f.name] = value
 
+        try:
+            return cls(**kwargs)
+        except:
+            raise RuntimeError(f"Failed at {f.name}, {f.type}, {getattr(f.type, '__origin__', None)}, {f.type.__args__[0]}")
+            #AllowedRaces, set[int], class set, class int
 
-        return cls(**kwargs)
 
-    def load_gameDataOld(self) -> GameData: #loads as lists of dataclasses, not ideal
+    def load_gameDataOld(self) -> clsGameData: #loads as lists of dataclasses, not ideal
         
         #for each data table
         #for each row in the data table
         #call from_dict
-        myGameData = GameData()
+        myGameData = clsGameData()
 
         for f in fields(myGameData):
             #check target class is list of dataclass
@@ -217,7 +237,7 @@ class Loader:
         
         return myGameData
 
-    def load_GameData(self) -> GameData: #loads each csv as a numpy, then each numpy into the gamedata initializer
+    def load_GameData(self) -> clsGameData: #loads each csv as a numpy, then each numpy into the gamedata initializer
 
         #we could use int16 for everything to make uniform, but being specific will probably help
         #idk how to do dtypes per packed column, probably can't
@@ -258,12 +278,27 @@ class Loader:
                 field = loadtable["csv"]
             fields[field] = out
         
-        return GameData(**fields)
+        return clsGameData(**fields)
         # return fields
  
     def load_map(self, mapFilename):
-        path = self.maps_dir / mapFilename
+
+        #handling various filename stuff
+        root, ext = os.path.splitext(mapFilename)
+        candidates = []
+        if ext.lower() in (".yaml", ".yml"):
+            candidates.append(mapFilename)
+        else:
+            candidates.append(mapFilename + ".yaml")
+            candidates.append(mapFilename + ".yml")
+        #try to find it
+        for filename in candidates:
+            path = self.maps_dir / filename
+            if path.exists(): break
+        if path is None:
+            raise RuntimeError(f"Map not found {mapFilename}")  
+
+        #actual load
         raw = self.load_yaml(path) #loads data as dicts and stuff
-        myMap: GameState = self.from_dict(GameState, raw)
-        # return raw
+        myMap: clsGameState = self.from_dict(clsGameState, raw)
         return myMap
