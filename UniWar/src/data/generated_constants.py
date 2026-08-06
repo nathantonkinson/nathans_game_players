@@ -72,7 +72,7 @@ MOBILITYCOST = 3
 STRENGTH = 0
 ARMORPIERCING = 1
 
-# Constants for Ability numbers 
+# Constants for Abilities numbers 
 ATTACK = 1
 CAPTUREBASE = 2
 INFECT = 3
@@ -100,3 +100,39 @@ MOVE = 24
 RESURFACENOATTACK = 25
 PASSTURN = 26
 SURRENDER = 27
+
+# Constants for Terrains numbers 
+PLAIN = 1
+HARBOR = 2
+MOUNTAIN = 3
+FOREST = 4
+MEDICAL = 5
+ROAD = 6
+BRIDGE = 7
+DESERT = 8
+SWAMP = 9
+CITY = 10
+REEF = 11
+CHASM = 12
+WATER = 13
+OCEAN = 14
+BASE = 15
+VOID = 16
+
+# Constants for Altitudes numbers 
+SURFACEAIR = 1
+UNDERWATER = 2
+UNDERGROUND = 3
+
+# Constants for Races numbers 
+KHRALEANS = 1
+SAPIENS = 2
+TITANS = 3
+
+# Constants for Unittypes numbers 
+LIGHTGROUND = 1
+HEAVYGROUND = 2
+AERIAL = 3
+AQUATIC = 4
+AMPHIBIAN = 5
+

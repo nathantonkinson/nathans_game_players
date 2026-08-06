@@ -1,10 +1,10 @@
 #add default python imports here (dataclasses, numpy, etc)
 
 #you will need to do your own imports from the repo here
-from src.engine.playerParent import playerParent
-from src.data.gameDataClasses import GameData, GameState, clsAction
+from src.engine.heuristicParent import heuristicParent
+from src.data.gameDataClasses import GameData, GameState
 
-class myPlayer(playerParent):
+class heuristicExample(heuristicParent):
     def __init__(self): #no required arguments, optional args ok
         super().__init__() #runs the init of template/parent
 
@@ -14,9 +14,7 @@ class myPlayer(playerParent):
         self.version = "(No version given)" #useful perhaps if we are doing genetic algorithms or something...
 
         #do your own init stuff here
-        #the parent has a self.engine property that will IDE autocomplete that you use for the input information. This will be set by what uses your player before choose_action is called
 
-    def choose_action(self) -> clsAction:
-        #Return a clsAction. Child classes override this.
-        #Use the self.engine as data on the current state
-        raise NotImplementedError("Child AI must implement choose_action()")
+    #this is your override of the parent def
+    def getWinProbability(self):
+        return 0.5

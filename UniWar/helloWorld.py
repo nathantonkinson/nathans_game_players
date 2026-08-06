@@ -9,7 +9,7 @@ import cProfile # cProfile.run("helloWorld()", sort="tottime")
 from src.data.loader import Loader #this file has file tree navigation stuff btw
 # import src.gameDataClasses as dc
 import src.data.generated_constants as gc
-from src.data.gameDataClasses import clsGameData, clsGameState, clsAction, clsLoc, write_constants_file
+from src.data.gameDataClasses import clsGameData, clsGameState, clsAction, clsLoc
 import src.data.flattening as f
 from src.engine.engine import Engine
 from src.visualizer.visualizer import Visualizer #lol folder, filename, and class are all the same
@@ -17,7 +17,7 @@ from src.data.stateCleanse import stateCleanse
 from players.playerRandom import clsPlayerRandom
 from players.playerFirstchoice import clsPlayerFirstchoice #maybe need to do something special so we have access to all of these, or can do more like a list
 from src.engine.gameManager import clsGameManager
-
+from src.data.writeConstants import write_constants_file
 
 
 #region run manually
@@ -43,41 +43,42 @@ from src.engine.gameManager import clsGameManager
 
 
 
-
+# myLoader = Loader()
+# myLoader.load_map("plainsLine")
 
 # Player1 = clsPlayerFirstchoice()
 # Player2 = clsPlayerFirstchoice()
 Player1 = clsPlayerRandom()
 Player2 = clsPlayerRandom()
-myGameManager = clsGameManager("plainsLine", playerListInstance=[Player1, Player2])
-write_constants_file(myGameManager.Engine.GameData) #don't need to run this every time, could put it in a utility packet
+myGameManager = clsGameManager()
+write_constants_file(myGameManager.GameData) #don't need to run this every time, could put it in a utility packet
+myGameManager.setMap(mapFilename="plainsLine", playerListInstance=[Player1, Player2])
 myGameManager.play(gameCount=100)
 
 
 
-
 #ok now let's do:
-#logging
+#game logging for replays and ai training and whatnot
 #something to see all possible combos of moves/actions on a turn, maybe then plug into visualizer
 #a very basic static heuristic (credits)
 #more complicated maps and units (not doing any specials yet - no plague, no underlings or subs, no bases, no conversions)
-#add healing
 #see if we can get a CPU of any kind of solve tank vs plasma or something similar, or even the 10 vs 1 for that matter.
-#exeption handling
+#   two marines on swamp with a mountain in between
+#automatically detect changes to player files and increment their version?
 
 # myViz = Visualizer(myGameData, myGameState, myEngine) #we should actually only need to pass the engine, right?
 # myViz.run()
 
 
 #don't forget data validation
-#and map cleansing, maybe
+#there's more opportunity in map cleansing
 #use np arrays instead of cls loc perhaps? So available actions will be a numpy? But then it would have to be added to gradually... idk. It's just one of the most common things we do.
-#call for moves only once per unit?
-#getGexesInRange -dist_max got overflow warning
+
             
 
 #might be a good exercise to run every unit on every terrain vs every unit on every terrain
     #technically for generating all possible p values, but also just good exercise
+
 
 # if __name__ == "__main__": print("I'm main") #in other files prints something like src.data.gameDataClasses
 

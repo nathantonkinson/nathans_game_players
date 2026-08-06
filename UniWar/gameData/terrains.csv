@@ -1,16 +1,16 @@
 Name	Number	Color_inVisualizer	Notes
 Plain	1		
-Harbor	2		Special since it can build units
+Harbor	2		Special since it can build units. Does not count for tiebreaking in tournaments
 Mountain	3		
 Forest	4		
 Medical	5		
 Road	6		
-Bridge	7		Interesting since both underwater and underground. Need more testing on game functionality
+Bridge	7		Submersibles and underlings cannot coexist here, despite it being (the only) terrain where both can be in their special state. They can't attack each other.
 Desert	8		looks like hills
 Swamp	9		
-City	10		
+City	10		Earns credits if you start your turn with a unit on it.
 Reef	11		
-Chasm	12		
+Chasm	12		The orientation of the chasm doesn't matter.
 Water	13		
 Ocean	14		
 Base	15		Special since it can generate credits and build units

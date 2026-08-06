@@ -165,8 +165,13 @@ class Loader:
         for f in fields(cls):
             value = data.get(f.name)
 
+            #optional field actually missing I think
+            if value is None:
+                # kwargs[f.name] = None
+                continue #the default will handle this, don't add to kwargs
+
             # Nested single dataclass
-            if is_dataclass(f.type) or is_optional_dataclass(f.type):
+            elif is_dataclass(f.type) or is_optional_dataclass(f.type):
                 if value is None: #field of parent dataclass omitted due to optional, so no data for this dataclass instance
                     kwargs[f.name] = None
                 else:
@@ -195,11 +200,6 @@ class Loader:
             #     else:  # it's a set
             #         kwargs[f.name] = {self.from_dict(inner, v) for v in value}
             #     continue
-
-            #optional field actually missing I think
-            elif value is None:
-                # kwargs[f.name] = None
-                continue #the default will handle this, don't add to kwargs
             
             # Normal field
             else:
@@ -279,8 +279,7 @@ class Loader:
             fields[field] = out
         
         return clsGameData(**fields)
-        # return fields
- 
+        # return fields 
     def load_map(self, mapFilename):
 
         #handling various filename stuff

@@ -1,6 +1,6 @@
-from players._playerTemplate import playerTemplate
+from src.engine.playerParent import playerParent
 
-class clsPlayerFirstchoice(playerTemplate):
+class clsPlayerFirstchoice(playerParent):
     def __init__(self, **kwargs): #no required arguments, put optional arguments between self and **kwargs
         super().__init__(**kwargs) #runs the init of template/parent
         #overrides of default properties

@@ -19,7 +19,9 @@ import heapq #used for movement
 import src.data.gameDataClasses as dc
 from src.data.gameDataClasses import clsGameState, clsGameData, clsAction, clsLoc
 import src.data.generated_constants as gc
+import src.errorHandler as eh
 
+ADJACENT_INCS = [(-1, 1), (0, 1), (-1, 0), (1, 0), (0, -1), (1, -1)]
 
 class Engine:
     def __init__(self, gamestate: clsGameState, gamedata: clsGameData):
@@ -249,8 +251,6 @@ class Engine:
         #get movement total
         #breadth first
 
-        adjacentIncs = [(-1, 1), (0, 1), (-1, 0), (1, 0), (0, -1), (1, -1)]
-
         #add starting because we can attack without moving. This does technically now allow moving and not attacking nowhere and thus skipping healing...
         unitnum = self.GameState.Units.UnitNumbers[unit_index]
         pq = [(0, start_loc)] #list of hexes to explore
@@ -267,7 +267,7 @@ class Engine:
             # if cost > mobility: continue
 
             #look at adjacents
-            for inc in adjacentIncs:
+            for inc in ADJACENT_INCS:
                 #coords and OOB
                 x = loc[gc.X] + inc[gc.X]
                 y = loc[gc.Y] + inc[gc.Y]
@@ -504,7 +504,7 @@ class Engine:
 
                 #attacker damage inflicted
                 if dhp == 0:
-                    self.destroyUnit(action.DefenderUnitIndex)
+                    self.destroyUnit(action.DefenderUnitIndex, action.UnitIndex)
                     #let the system know there's a new space open for movement and no ZOC
                 else:
                     self.GameState.Units.UnitHps[action.DefenderUnitIndex] = dhp
@@ -512,7 +512,7 @@ class Engine:
                 #reciprocal damage
                 #do it
                 if ahp == 0:
-                    self.destroyUnit(action.UnitIndex)
+                    self.destroyUnit(action.UnitIndex, action.DefenderUnitIndex) #do we count reciprocal damage towards that player? yes
                     attackerDead = True
                     #if unit destroyed... no move after attack. We know that due to available actions... hm
                 else:
@@ -526,7 +526,7 @@ class Engine:
             case gc.REPAIR: #repair
                 #we have disabled this from hashtags by modifying GaemData
                 #if repairing is disabled, this should not be called
-                pass
+                self.repairUnit(action.UnitIndex)
             case gc.PASSTURN:
                 self.passTurn()
                 return #no need to do the other stuff (I mean I guess wincon checking?? would only be useful if we killed our own unit)
@@ -576,49 +576,108 @@ class Engine:
                 #if dest = either of the two attack locations, disable it
         #when generating abilities, disable action by some flag if ZOC or occupied but still make it
             #we need some flag on the action for what unit prevents? but multiple units could prevent??
-    def destroyUnit(self, unit_index):
+    def destroyUnit(self, unit_index, attacker_index):
+        #record kill count
         #delete unit
         #newly created units can take the slot later
         #let the system know there's a new space open for movement and no ZOC
         
-        #zero out the info
+        #record kill count
+        ap = self.GameState.Units.UnitPlayers[attacker_index]
+        dn = self.GameState.Units.UnitNumbers[unit_index]
+        dv = self.GameData.Units[(dn, gc.COST)]
+        self.GameState.MetadataCurrent.PlayersKills[ap] += dv
+
+        #zero out the info of dead unit
         self.GameState.Units.UnitHps[unit_index] = 0
         self.GameState.Units.UnitNumbers[unit_index] = 0
         self.GameState.Units.UnitPlayers[unit_index] = 0 #players indexed at 1
         self.GameState.Units.UnitHexes[unit_index, :] = 0 #x, y, and altitude
         self.GameState.Units.UnitActions[unit_index] = 0
         #other properties like plauge, cooldown, exp, etc
+    def repairUnit(self, unit_index):
+        #check for medical tiles and nearby same player (not team) healer units
+
+        #hp max
+        hp_max = 10
+        #veterancy
+        eh.warning("Veterancy not accounted for in healing")
+        current_hp = self.GameState.Units.UnitHps[unit_index]
+        if current_hp == hp_max: return #if already at max, do nothing
+
+        #start with units innate facotr
+        unitnum = self.GameState.Units.UnitNumbers[unit_index]
+        unitrepair = self.GameData.Units[(unitnum, gc.REPAIRRATE)]
+        if unitrepair == 0: return #it can't heal
+        totalrepair = unitrepair
+
+        #check medical tile underneath
+        loc = self.GameState.Units.UnitHexes[unit_index]
+        terrainnum = self.GameState.Map.Map[loc[gc.X], loc[gc.Y]]
+        if terrainnum == gc.MEDICAL:
+            totalrepair *= 3
+
+        #check nearby units for having healing ability
+        for inc in ADJACENT_INCS:
+            #coords and OOB
+            x = loc[gc.X] + inc[gc.X]
+            y = loc[gc.Y] + inc[gc.Y]
+            if x >= self.GameState.Map.Map.shape[0] or x < 0 or y >= self.GameState.Map.Map.shape[1] or y < 0: continue #OOB
+
+            #any units here?
+            for a in self.GameData.Altitudes:
+                if a == 0: continue
+                i = self.locUnits[(x, y, a)]
+                if i not in [255, -1, None]:
+                    cp = self.GameState.MetadataCurrent.CurrentPlayer
+                    ip = self.GameState.Units.UnitPlayers[i]
+                    if cp != ip: continue #not same player unit, not helpful
+                    inum = self.GameState.Units.UnitNumbers[i]
+                    #check if that unit has repairboost
+                    if self.GameData.UnitAbilities[(inum, gc.REPAIRBOOST, gc.RECORDEXISTS)] == 1:
+                        totalrepair *= self.GameData.UnitAbilities[(inum, gc.REPAIRBOOST, gc.ABILITYSTRENGTH)]
+                        continue
+
+        #actually do repair
+        self.GameState.Units.UnitHps[unit_index] = min(hp_max, current_hp + totalrepair)
     def passTurn(self):
-        #pass turn
-        
-        #heal units that still have actions - not implemented yet
-
-        #cycle current player and round
-        cp = (self.GameState.MetadataCurrent.CurrentPlayer + 1) % len(self.GameState.MetadataInitial.PlayersInitial)
-        self.GameState.MetadataCurrent.CurrentPlayer = cp
-        if self.GameState.MetadataCurrent.CurrentPlayer == 0:
-            self.GameState.MetadataCurrent.Round += 1
-        #check wincon in case the person killed themselves on their turn and made themselves lose
-        if self.checkWinCon() == True: #duplication of wincon checking at end of action
-            cp = self.GameState.MetadataCurrent.CurrentPlayer
-            ct = self.GameState.MetadataInitial.PlayersInitial[cp].Team
-            self.GameState.MetadataCurrent.WinnerTeam = ct
-            return
-        #check round limit
-        if self.roundlimit not in [0, -1, None]:
-            if self.GameState.MetadataCurrent.Round > self.roundlimit:
-                #call some kind of heuristic
-                pass
-        #refresh the actions of current player units
-        for u, p in enumerate(self.GameState.Units.UnitPlayers):
-            if p == cp:
-                #lookup actions for that unit
-                un = self.GameState.Units.UnitNumbers[u]
-                ua = self.GameData.Units[(un, gc.ACTIONSPERTURN)]
-                self.GameState.Units.UnitActions[u] = ua
-
-        self.buildHelperArrays()
-        self.getAvailableActions()
+            #pass turn
+            
+            #heal units that still have actions
+            if "NOREPAIR" not in self.GameState.MetadataInitial.Hashtags:
+                cp = self.GameState.MetadataCurrent.CurrentPlayer
+                for u, p in enumerate(self.GameState.Units.UnitPlayers):
+                    if p != cp: continue
+                    for _ in range(self.GameState.Units.UnitActions[u]):
+                        self.repairUnit(u)
+                    self.GameState.Units.UnitActions[u] = 0
+    
+            #cycle current player and round
+            cp = (self.GameState.MetadataCurrent.CurrentPlayer + 1) % len(self.GameState.MetadataInitial.PlayersInitial)
+            self.GameState.MetadataCurrent.CurrentPlayer = cp
+            if self.GameState.MetadataCurrent.CurrentPlayer == 0:
+                self.GameState.MetadataCurrent.Round += 1
+            #check wincon in case the person killed themselves on their turn and made themselves lose
+            if self.checkWinCon() == True: #duplication of wincon checking at end of action
+                cp = self.GameState.MetadataCurrent.CurrentPlayer
+                ct = self.GameState.MetadataInitial.PlayersInitial[cp].Team
+                self.GameState.MetadataCurrent.WinnerTeam = ct
+                return
+            #check round limit
+            if self.roundlimit not in [0, -1, None]:
+                if self.GameState.MetadataCurrent.Round > self.roundlimit:
+                    #call some kind of heuristic
+                    pass
+            #refresh the actions of current player units
+            for u, p in enumerate(self.GameState.Units.UnitPlayers):
+                if p == cp:
+                    #lookup actions for that unit
+                    un = self.GameState.Units.UnitNumbers[u]
+                    ua = self.GameData.Units[(un, gc.ACTIONSPERTURN)]
+                    self.GameState.Units.UnitActions[u] = ua
+    
+            self.buildHelperArrays()
+            self.getAvailableActions()
 
     def checkWinCon(self):
         #checks if any team has won
@@ -629,7 +688,7 @@ class Engine:
             # self.basenum = np.sum(np.isin(self.GameState.Map.Map, (2, 15))) #count bases
             for x, row in enumerate(self.GameState.Map.Map):
                 for y, terrainNum in enumerate(row):
-                    if terrainNum in (2, 15):
+                    if terrainNum in (gc.HARBOR, gc.BASE):
                         #check ownership
                         bp = self.GameState.Map.BasePlayers[(x, y)]
                         if bp in (-1, 255, None): continue #no one owns it, check next
