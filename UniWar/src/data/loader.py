@@ -1,5 +1,6 @@
 #converts files to cleansed: game state, maps, mods, and AIs
 #data classes elsewhere
+#designed to be pretty agnostic of data structure
 
 import csv
 import yaml
@@ -260,19 +261,12 @@ class Loader:
                 # if len(loadtable["packed_cols"]) > 1: shape += (len(loadtable["packed_cols"]),)
             out = np.zeros(shape, dtype=loadtable["dtype"])
             #load array
-            for dict in dictlist:
+            for dict in dictlist: #each row
                 index_solo = tuple(int(dict[col]) for col in loadtable["solo_cols"])
                 for c, col in enumerate(loadtable["packed_cols"]):
-                    try:
-                        out[index_solo + (c,)] = self.coerce(dict[col], loadtable["dtype"]) 
-                    except:
-                        # print(dict[col]) #blank
-                        print(loadtable['csv'], index_solo + (c,), col, "dc" + dict[col], loadtable["dtype"])
-                        print(type(dict[col]))
-                        print(len(dict[col]))
-                        raise RuntimeError("hey")
+                    out[index_solo + (c,)] = self.coerce(dict[col], loadtable["dtype"]) 
             out.flags.writeable = False
-            if "field" in loadtable:
+            if "field" in loadtable: #the _Name fields of GameData have a "field" key whose value is the GameData field name, for the others, the csv filestem is the same as the field name
                 field = loadtable["field"]
             else:
                 field = loadtable["csv"]

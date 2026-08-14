@@ -11,12 +11,12 @@ Usage (from the UniWar/ directory):
 You can also import and use it programmatically:
     from visualizer import Visualizer
     from src.loader import Loader
-    from src.engine.engine import Engine
+    from src.engine.engine import clsEngine
 
     loader = Loader()
     gamedata = loader.load_gameData()
     gamestate = loader.load_map("plainsLine.yaml")
-    engine = Engine(gamestate, gamedata)
+    engine = clsEngine(gamestate, gamedata)
 
     viz = Visualizer(gamedata, gamestate, engine)
     viz.run()
@@ -37,7 +37,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 
 from src.data.gameDataClasses import clsGameData, clsGameState, clsAction, clsLoc
-from src.engine.engine import Engine
+from src.engine.engine import clsEngine
 import src.data.generated_constants as gc
 
 #region constants
@@ -151,7 +151,7 @@ class Visualizer:
     engine    : Engine     – optional; needed for Pass Turn and action dispatch
     """
 
-    def __init__(self, gamedata: clsGameData, gamestate: clsGameState, engine: Engine = None):
+    def __init__(self, gamedata: clsGameData, gamestate: clsGameState, engine: clsEngine = None):
         self.gamedata  = gamedata
         self.gamestate = gamestate
         self.engine    = engine
@@ -271,7 +271,7 @@ class Visualizer:
         """Full map redraw."""
         self.canvas.delete("all")
         gs = self.gamestate
-        H, W = gs.Map.Map.shape
+        H, W = gs.Map.shape
 
         # Draw terrain hexes
         for h in range(H):
@@ -288,7 +288,7 @@ class Visualizer:
         self.canvas.configure(scrollregion=(0, 0, max_x + 20, max_y + 20))
 
     def _draw_hex(self, h: int, w: int):
-        terrain_num = int(self.gamestate.Map.Map[h, w])
+        terrain_num = int(self.gamestate.Map[h, w])
         fill  = TERRAIN_COLORS.get(terrain_num, "#666666") #the 6s are default I think
         cx, cy = hex_center(h, w)
         
@@ -381,7 +381,7 @@ class Visualizer:
         px = self.canvas.canvasx(event.x)
         py = self.canvas.canvasy(event.y)
 
-        H, W = self.gamestate.Map.Map.shape
+        H, W = self.gamestate.Map.shape
         clicked = pixel_to_hex(px, py, H, W)
         if clicked is None:
             return
@@ -421,7 +421,7 @@ class Visualizer:
 
         # ── awaiting_attack: click an adjacent enemy or anywhere else ──
         elif self._mode == "awaiting_attack":
-            print("Attempted attack def")
+            # print("Attempted attack def")
             self._on_attack_click(h, w)
 
         # ── awaiting_final_move: click an empty hex for MoveAfterAttack
@@ -613,7 +613,7 @@ class Visualizer:
 
     def _update_hex_info(self, h: int, w: int):
         """Populate the Hex and Unit text boxes for the given coordinates."""
-        terrain_num  = int(self.gamestate.Map.Map[h, w])
+        terrain_num  = int(self.gamestate.Map[h, w])
         terrain_name = self.gamedata.Terrains_Name[(terrain_num, gc.NAME)]
         notes        = self.gamedata.Terrains_Name[(terrain_num, gc.NOTES)]
 

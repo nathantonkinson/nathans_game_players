@@ -14,7 +14,7 @@ from src.data.loader import Loader
 import src.data.flattening as f
 from src.data.stateCleanse import stateCleanse
 from src.data.gameDataClasses import clsGameState, clsGameData
-from src.engine.engine import Engine
+from src.engine.engine import clsEngine
 from src.engine.playerParent import playerParent
 import src.data.generated_constants as gc
 import src.errorHandler as eh
@@ -62,6 +62,7 @@ class clsGameManager:
         mapState = stateCleanse(mapState, self.GameData) 
         self.GameStateStart: clsGameState = mapState
         self.GameState: clsGameState = copy.deepcopy(self.GameStateStart)
+        eh.warning("Switch gamemanager to use clone_engine instead of deepcopy")
 
         #players instances get
         # players_dir = Path("./players")
@@ -106,8 +107,9 @@ class clsGameManager:
         #stuff that should run once at the beginning of each individual game
 
         #engine (holds GameState and GameData)
-        self.Engine: Engine = Engine(self.GameState, self.GameData) #the engine does replace GameData when it handles some hashtags (no healing)... ugh
+        self.Engine: clsEngine = clsEngine(self.GameState, self.GameData) #the engine does replace GameData when it handles some hashtags (no healing)... ugh
         self.Engine.GameState = copy.deepcopy(self.GameStateStart)
+        eh.warning("Switch gamemanager to use clone_engine instead of deepcopy")
         self.Engine.Initialization()
 
         #reset the players
@@ -141,7 +143,7 @@ class clsGameManager:
         self.gameStart()
 
         while self.Engine.GameState.MetadataCurrent.WinnerTeam is None:
-            round = self.Engine.GameState.MetadataCurrent.Round
+            round = self.Engine.GameState.MetadataCurrent.CurrentRound
             cp = self.Engine.GameState.MetadataCurrent.CurrentPlayer
             currentPlayerInstance = self.players[cp]
             action = currentPlayerInstance.choose_action_withtimelimit()
@@ -163,10 +165,10 @@ class clsGameManager:
             #we also have wincon stuff in the engine, but this is tournament tie-breaking wincon stuff that only occurs once game is done
             #we will use what I see as standard from miamimoose, at round limit winner is most bases > most kills > draw
             team_bases = [0]*self.teams_count
-            for x, col in enumerate(self.GameState.Map.Map):
+            for x, col in enumerate(self.GameState.Map):
                 for y, terrainNum in enumerate(col):
                     if terrainNum in (15): #base (we are not including harbors=2)
-                        p = self.GameState.Map.BasePlayers[(x, y)]
+                        p = self.Engine.locPlayers[(x, y)]
                         if p not in [-1, 255, None]:
                             t = self.GameState.MetadataInitial.PlayersInitial[p].Team
                             team_bases[t] += 1

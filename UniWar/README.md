@@ -23,6 +23,12 @@ I don't own this game or anything. Don't use this codebase to try and rip them o
     - attempt to back into it via symbolic regression
         - I had TuringBot_3.3.1_windows64.exe in here but it's too big for github so it's in .gitignore, but you can download it yourself. Also we don't need it because Spanky's Janky uniwar calculator I think has the true accurate code/process
     - new numbers generated start of each turn right, not across whole game?
+- gub
+    - +1 gub if previous attack was anything but range 1 (including range 0)
+    - if previous attack was range 1 then it's all based on location of prev attacker:
+    - +1: adjacent to prev attacker (including it would seem dist 0 from defender - cannot get rng to confirm if it's 1 or 2, but pattern says 1)
+    - +2: everywhere else, for real
+    - +3: distance 2 from prev attacker in straight line
 - teams
     - same team do not have ZOC against you and you can move through them
     - cannot heal boost friendlies
@@ -36,6 +42,7 @@ I don't own this game or anything. Don't use this codebase to try and rip them o
     - no fow can target subs
     - subs can see each other from more than adjacent. What range exactly? I guess just underwater vision?
     - submerged kraken can attack underling when underling on road, but not when it's on land... interesting
+    - units that could normally move ontop of subs cannot if they can attack, because clicking that space does the attack. If they can't see and move ontop, they can't attack if range 1, but can attack if they have range 0.
 - special abilities (emp, capture, convert)
     - tp no zone of control
     - emp no zone of control
@@ -62,6 +69,8 @@ I don't own this game or anything. Don't use this codebase to try and rip them o
     - #RNGBUILDANY - same as above, but player bases build random units of any race. Even more fun!
     - #TTL120 - total time limit across all turns
     - #TEST - excludes the map from ranked. I think I'm going to automatically make all non-symmetrical maps unranked
+    - #BOOTCAMP50 - each unit sitting on a city gains 50xp at start of turn
+    - #TIMEBANK42 - I assume 42 minutes of your turn active, while in game only?
 - My added map hashtags
     - #editstats - some people use this, but it is not mechanically capture. map has different unit stats. Not implemented yet, would need a bunch of other metadata stuff
     - #DETERMINISTICDAMAGE - use the average damage expected, round up/down
@@ -175,13 +184,13 @@ I don't own this game or anything. Don't use this codebase to try and rip them o
             - Neural net (value head(s) - win/loss, volatility, +?)
         - Slow - involve looking into the future
         - Win/loss prediction vs stability measure (Quiescence) vs other measures (??)
-    - Search/pruning functions - choose which actions to explore - slightly different purpose (and thus different pruning) than players/decisions
+    - Search/pruning functions - choose which actions to explore - slightly different purpose (and thus different pruning) than players/decisions. Can reference multiple heuristics
         - MCTS weights
         - Minimax
         - "Move ordering" meaning try the best moves first - maybe not useful in mcts? But should be in minimax
         - We will need some very strong deduping (actual dups and maybe things that are close too)
     - Trainers - kind of have to be specific to the heuristic or player. Probably in the AI folder
-        - Genetic to train nets
+        - Genetic to train nets - can either make the variants play, or 
         - Some kind of genetic on the adjustable parameters of manual heuristic
         - Train on high skill histories
         - Play vs self or others, whatever, to generate games

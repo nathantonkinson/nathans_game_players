@@ -17,6 +17,7 @@
 
     #MAPS
     #valid unit types, abilities, terrain types, etc. No more than 1 unit per tile per state
+    #symmetry
     #REPLAYS
     #these should be generated, so hopefully not a problem. But same checks as maps unless they have different structure
 

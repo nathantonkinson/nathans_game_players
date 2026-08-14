@@ -1,4 +1,4 @@
-These players need to take in an Engine (GameState and GameData) and output an action from the availableActions list
+These players need to take in an clsEngine (GameState and GameData) and output an action from the availableActions list
 
 You may reference heuristics and search functions from elsewhere in the code base.
 

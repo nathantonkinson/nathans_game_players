@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from src.engine.engine import Engine
+from src.engine.engine import clsEngine
 
 class clsSubmissionMetadataParent():
     def __init__(self):
@@ -34,4 +34,4 @@ class clsSubmissionMetadataParent():
         self.timelimit_seconds = 60 #I guess we're defaulting to 1 minute per action if game manager doesn't set it for us
 
         #information used for calcs, will be assigned by caller
-        self.engine: Engine = None
+        self.engine: clsEngine = None

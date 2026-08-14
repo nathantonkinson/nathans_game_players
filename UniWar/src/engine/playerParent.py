@@ -6,7 +6,7 @@ import numpy as np
 
 import src.data.generated_constants as gc
 from src.data.gameDataClasses import clsGameState, clsGameData, clsAction
-from src.engine.engine import Engine
+from src.engine.engine import clsEngine
 from src.engine.submissionMetadataParent import clsSubmissionMetadataParent
 import src.errorHandler as eh
 
@@ -93,5 +93,5 @@ class playerParent(clsSubmissionMetadataParent):
         if result in self.engine.availableActions:
             return result
         else:
-            print("chosen action not in available list", result, self.engine.availableActions)
+            eh.error("chosen action not in available list", result, self.engine.availableActions)
             return self.fallback_action() #invalid, use fallback action

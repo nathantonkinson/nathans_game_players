@@ -5,7 +5,7 @@
 #let's not do the middle-flat strategy, just full flat
 
 
-from copy import deepcopy
+# from copy import deepcopy
 import dataclasses as dc
 from dataclasses import replace
 import numpy as np
@@ -145,7 +145,6 @@ def flattenUnitTerrains(GameData: clsGameData):
             if GameData.UnitTerrains[(u, t, gc.MOBILITYCOST)] > 0: #we don't have an "exists" col here, but this should work
                 out[(u, t)] = GameData.UnitTerrains[(u, t)]
 
-    # print(out[21])
     return dc.replace(GameData, UnitTerrains = out)
 
 def flattenUnitTerrainAltitudes(GameData: clsGameData):
